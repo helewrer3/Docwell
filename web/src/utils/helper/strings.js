@@ -1,0 +1,50 @@
+const strings = {
+  tables: {
+    users: "user_accounts",
+    patients: "patients",
+    visits: "visits",
+    prescriptions: "prescriptions",
+    medicines: "medicines",
+    manufacturers: "medicine_manufacturers",
+  },
+  rows: {
+    userID: "user_id",
+    password: "password",
+    patientID: "patient_id",
+    visitID: "visit_id",
+    medicineID: "medicine_id",
+    manufacturerID: "manufacturer_id",
+    saltName1: "salt_1_name",
+    saltName2: "salt_2_name",
+    name: "name",
+    phoneNumber: "phone_number",
+    sex: "sex",
+    dateOfBirth: "date_of_birth",
+    dateOfVisit: "date_of_visit",
+    reportsURL: "reports_url",
+    advice: "advice",
+  },
+};
+
+const prettify = {
+  [strings.rows.userID]: "User ID",
+  [strings.rows.password]: "Password",
+  [strings.rows.patientID]: "Patient ID",
+  [strings.rows.visitID]: "Visit ID",
+  [strings.rows.medicineID]: "Medicine ID",
+  [strings.rows.manufacturerID]: "Manufacturer ID",
+  [strings.rows.name]: "Name",
+  [strings.rows.saltName1]: "1st Salt Name",
+  [strings.rows.saltName2]: "2nd Salt Name",
+  [strings.rows.phoneNumber]: "Phone No.",
+  [strings.rows.sex]: "Sex",
+  [strings.rows.dateOfBirth]: "Date of Birth",
+  [strings.rows.dateOfVisit]: "Date of Visit",
+  [strings.rows.reportsURL]: "Reports URL",
+  [strings.rows.advice]: "Advice",
+  [strings.tables.patients]: "Patient",
+  [strings.tables.visits]: "Visit",
+  [strings.tables.medicines]: "Medicine",
+};
+
+export { strings, prettify };
