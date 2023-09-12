@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button } from "antd";
+import { Button, notification } from "antd";
 import axios from "axios";
 
 import ModalForm from "../utils/components/ModalForm";
@@ -25,8 +25,19 @@ const AddData = ({ tableName = "" }) => {
           },
         }
       );
+      notification.open({
+        type: "success",
+        message: "Success",
+        description:
+          "Data added successfully, please refresh the page to reflect the changes.",
+      });
     } catch (error) {
       console.log(error);
+      notification.open({
+        type: "error",
+        message: "Error",
+        description: "Couldn't add data into database, try again later.",
+      });
     }
     setOpen(false);
   };

@@ -8,11 +8,13 @@ const {
 
 const getDataRecords = async (req, res) => {
   try {
-    const tableName = req.query.tableName,
-      filters = req.query.filters,
-      page = parseInt(req.query.page),
-      size = parseInt(req.query.size);
-    const result = await getFromDB({ tableName, filters, page, size });
+    const { tableName, filters, page = 1, size = 1 } = req.query;
+    const result = await getFromDB({
+      tableName,
+      filters,
+      page: parseInt(page),
+      size: parseInt(size),
+    });
     res.status(200).json(result);
   } catch (error) {
     console.log(error);

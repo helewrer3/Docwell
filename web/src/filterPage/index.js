@@ -17,12 +17,14 @@ const initFilters = (tableName) => {
 };
 
 const mergeFilters = (prevFilters, val) => {
+  console.log(val);
   const res = { ...prevFilters };
   for (const key in val) {
-    if (key in res && val[key]) {
+    if (key in res && val[key] !== undefined) {
       res[key] = val[key];
     }
   }
+  console.log(res);
   return res;
 };
 
@@ -44,7 +46,7 @@ const FilterPage = ({ tableName = "", sidebarKey = "" }) => {
         }}
       >
         <Row justify="end">
-          <Col xs={24} sm={6} lg={2}>
+          <Col xs={24} sm={6} md={4} lg={3} xl={2}>
             <AddData tableName={tableName} />
           </Col>
         </Row>

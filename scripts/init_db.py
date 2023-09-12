@@ -62,7 +62,7 @@ if myconn is not None:
           print("Command skipped: ", IOError)
 
   print("Setting up database...")
-  database = os.environ.get("DB_NAME", "test_db")
+  database = os.environ.get("DB_DATABASE", "test_db")
 
   initDB("./sql/init_db.sql", database)
   initMedicineManufacturers("./csv/medicine_dataset.csv", database)

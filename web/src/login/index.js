@@ -1,10 +1,20 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Card, Form, Input, Row, Col, Typography, Divider } from "antd";
+import {
+  Button,
+  Card,
+  Form,
+  Input,
+  Row,
+  Col,
+  Typography,
+  Divider,
+  notification,
+} from "antd";
 import axios from "axios";
 
 import { strings, prettify } from "../utils/helper/strings";
-import { getFromStorage, saveToStorage } from "../utils/helper/localStorage";
+import { saveToStorage } from "../utils/helper/localStorage";
 import { path } from "../utils/routers/routes";
 
 const { Title } = Typography;
@@ -35,8 +45,18 @@ const onFinish = async ({ values, navigate, isLogin }) => {
     );
     saveToStorage({ name: "database", data: res.data });
     navigate(path.entry);
+    notification.open({
+      type: "error",
+      message: "Welcome!",
+      description: "User logged in successfully.",
+    });
   } catch (error) {
     console.log(error);
+    notification.open({
+      type: "error",
+      message: "Error",
+      description: "There was an error logging you in, try again later.",
+    });
   }
 };
 

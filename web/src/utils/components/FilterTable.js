@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Table } from "antd";
+import { Table, notification } from "antd";
 import axios from "axios";
 import moment from "moment";
 
@@ -25,15 +25,25 @@ const getTableMeta = async ({ tableName, filters, setTotalPage }) => {
       }
     );
     setTotalPage(res.data.rowCount);
+    notification.open({
+      message: "Table Initialized",
+      description: "Table initialized successfully!",
+      type: "success",
+    });
   } catch (error) {
     console.log(error);
+    notification.open({
+      message: "Error",
+      description: "Error initializing table, try again later.",
+      type: "error",
+    });
   }
 };
 
 const getTableData = async ({
   tableName,
   filters,
-  pageSize = 20,
+  size = 20,
   page = 1,
   setDataSource,
   setIsLoading,
@@ -45,7 +55,7 @@ const getTableData = async ({
         tableName,
         filters,
         page,
-        size: pageSize,
+        size,
       },
     });
     res.data.forEach((row, i) => {
@@ -58,6 +68,11 @@ const getTableData = async ({
     setDataSource(res.data);
   } catch (error) {
     console.log(error);
+    notification.open({
+      message: "Error",
+      description: "Error getting the data, try again later.",
+      type: "error",
+    });
   }
   setIsLoading(false);
 };
@@ -75,7 +90,7 @@ const FilterTable = ({ filters = {}, tableName = "" }) => {
       setDataSource,
       setIsLoading,
     });
-  }, [filters]);
+  }, [filters, tableName]);
 
   return (
     <>
@@ -90,11 +105,12 @@ const FilterTable = ({ filters = {}, tableName = "" }) => {
             setDataSource,
             setIsLoading,
             page: pagination.current,
-            pageSize: pagination.pageSize,
+            size: pagination.pageSize,
           });
         }}
         pagination={{
           total: totalPage,
+          defaultPageSize: 20,
         }}
       />
     </>

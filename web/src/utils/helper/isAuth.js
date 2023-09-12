@@ -1,5 +1,3 @@
-import axios from "axios";
-
 import { getFromStorage } from "./localStorage";
 
 const isAuth = () => {

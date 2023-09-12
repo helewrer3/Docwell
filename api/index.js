@@ -4,7 +4,7 @@ const app = express();
 
 if (process.env.NODE_ENV == "development")
   require("dotenv").config({
-    path: ".env.development",
+    path: ".env.local",
   });
 
 app.use(cors());

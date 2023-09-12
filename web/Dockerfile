@@ -7,8 +7,12 @@ COPY package-lock.json /code/package-lock.json
 
 RUN npm ci
 
+RUN npm install -g serve
+
 COPY . /code
 
 EXPOSE 3000
 
-CMD [ "npm", "start" ]
+RUN chmod +x init
+
+CMD [ "/code/init" ]

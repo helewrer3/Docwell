@@ -17,7 +17,7 @@ const QueryFilter = ({ callback = null, tableName = "" }) => {
     <Form name="data-filter" onFinish={onFinish}>
       <Row justify="space-around">
         {rows.map((column) => (
-          <Col xs={24} md={12} lg={8} xl={4}>
+          <Col xs={24} sm={12} md={8} xl={4}>
             <Item
               label={prettify[column.COLUMN_NAME]}
               name={column.COLUMN_NAME}
@@ -27,7 +27,6 @@ const QueryFilter = ({ callback = null, tableName = "" }) => {
                   varchar: <Input allowClear={true} />,
                   date: <DatePicker allowClear={true} />,
                   bigint: <InputNumber allowClear={true} />,
-                  smallint: <InputNumber allowClear={true} />,
                 }[column.DATA_TYPE]
               }
             </Item>

@@ -1,5 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Button, Card, Col, Layout, Row, Spin, Statistic, Avatar } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  Layout,
+  Row,
+  Spin,
+  Statistic,
+  Avatar,
+  notification,
+} from "antd";
 import axios from "axios";
 import moment from "moment";
 
@@ -31,7 +41,18 @@ const getStats = async ({ setVisitsWeek, setIsLoading }) => {
       );
       visCount += visit.data.rowCount;
     }
+    notification.open({
+      type: "success",
+      message: "Dashboard Initialized",
+      description: "Dashboard initialized successfully.",
+    });
   } catch (error) {
+    notification.open({
+      type: "error",
+      message: "Error",
+      description:
+        "There was error getting the required data, try again later.",
+    });
     console.log(error);
   }
   setVisitsWeek(visCount);
