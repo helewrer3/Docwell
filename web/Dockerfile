@@ -13,6 +13,6 @@ COPY . /code
 
 EXPOSE 3000
 
-RUN chmod +x init
+RUN chmod +x init.sh
 
-CMD [ "/code/init" ]
+CMD [ "/code/init.sh" ]

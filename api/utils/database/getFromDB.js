@@ -29,7 +29,7 @@ const getReferencedNames = async (rows, foreignKeyColumn, referencedTable) => {
   }
 };
 
-const getFromDB = async ({ tableName, filters, page, size }) => {
+const getFromDB = async ({ tableName, filters, page = 1, size = 1 }) => {
   const conditions = [];
 
   for (const filter in filters)

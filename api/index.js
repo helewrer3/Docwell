@@ -2,11 +2,6 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 
-if (process.env.NODE_ENV == "development")
-  require("dotenv").config({
-    path: ".env.local",
-  });
-
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

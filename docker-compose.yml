@@ -4,7 +4,7 @@ services:
     build:
       context: ./web
     environment:
-      REACT_APP_SERVER_URL: "http://api:8080"
+      REACT_APP_SERVER_URL: "http://localhost:${SERVER_PORT}"
     ports:
       - "3000:3000"
     depends_on:
@@ -16,8 +16,8 @@ services:
     build:
       context: ./api
     environment:
-      SERVER_PORT: 8080
-      NODE_ENV: "production"
+      SERVER_PORT: ${SERVER_PORT}
+      NODE_ENV: ${SERVER_ENV}
       DB_HOST: ${DB_HOST}
       DB_PORT: ${DB_PORT}
       DB_USER: ${DB_USER}
@@ -53,3 +53,9 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
     ports:
       - "${DB_PORT}:${DB_PORT}"
+    volumes:
+      - ${DB_VOLUME}:/var/lib/mysql
+
+volumes:
+  mysql-data-prod:
+  mysql-data-dev:

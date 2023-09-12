@@ -46,7 +46,7 @@ const onFinish = async ({ values, navigate, isLogin }) => {
     saveToStorage({ name: "database", data: res.data });
     navigate(path.entry);
     notification.open({
-      type: "error",
+      type: "success",
       message: "Welcome!",
       description: "User logged in successfully.",
     });
