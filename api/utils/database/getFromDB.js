@@ -1,6 +1,16 @@
 const { connection } = require("./getConnection");
 
-const getReferencedNames = async (rows, foreignKeyColumn, referencedTable) => {
+const getReferencedNames = async ({ tableName, rows }) => {
+  let foreignKeyColumn = null,
+    referencedTable = null;
+  if (tableName == "visits") {
+    foreignKeyColumn = "patients_id";
+    referencedTable = "patients";
+  } else if (tableName == "medicines") {
+    foreignKeyColumn = "manufacturer_id";
+    referencedTable = "medicine_manufacturers";
+  }
+
   if (foreignKeyColumn == null || rows.length == 0) return rows;
 
   const foreignKeys = rows.map((row) => row[foreignKeyColumn]);
@@ -29,7 +39,13 @@ const getReferencedNames = async (rows, foreignKeyColumn, referencedTable) => {
   }
 };
 
-const getFromDB = async ({ tableName, filters, page = 1, size = 1 }) => {
+const getFromDB = async ({
+  tableName,
+  filters,
+  page = null,
+  size = null,
+  replaceWithName = true,
+}) => {
   const conditions = [];
 
   for (const filter in filters)
@@ -38,30 +54,17 @@ const getFromDB = async ({ tableName, filters, page = 1, size = 1 }) => {
 
   const whereClause =
     conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
-  const sqlCmd = `SELECT * FROM ${tableName} ${whereClause} LIMIT ${size} OFFSET ${
-    (page - 1) * size
-  };`;
+  const paginationClause =
+    page != null ? `LIMIT ${size} OFFSET ${(page - 1) * size}` : "";
+  const sqlCmd = `SELECT * FROM ${tableName} ${whereClause} ${paginationClause};`;
 
   try {
     const [rows, fields] = await connection.query(sqlCmd);
 
-    let foreignKeyColumn = null;
-    let referencedTable = null;
-
-    if (tableName == "visits") {
-      foreignKeyColumn = "patients_id";
-      referencedTable = "patients";
-    } else if (tableName == "medicines") {
-      foreignKeyColumn = "manufacturer_id";
-      referencedTable = "medicine_manufacturers";
-    }
-
-    const rowsWithNames = await getReferencedNames(
-      rows,
-      foreignKeyColumn,
-      referencedTable
-    );
-    return rowsWithNames;
+    if (replaceWithName) {
+      const rowsWithNames = await getReferencedNames({ tableName, rows });
+      return rowsWithNames;
+    } else return rows;
   } catch (error) {
     throw error;
   }

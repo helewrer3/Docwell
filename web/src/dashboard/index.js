@@ -59,7 +59,7 @@ const getStats = async ({ setVisitsWeek, setIsLoading }) => {
   setIsLoading(false);
 };
 
-const Dashboard = () => {
+const Dashboard = ({ sidebarKey }) => {
   const [visitsWeek, setVisitsWeek] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
@@ -70,7 +70,7 @@ const Dashboard = () => {
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <Sidebar selectedKey="1" />
+      <Sidebar selectedKey={sidebarKey} />
       <Content
         style={{
           margin: "1em 1em",

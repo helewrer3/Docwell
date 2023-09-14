@@ -20,11 +20,10 @@ const mergeFilters = (prevFilters, val) => {
   console.log(val);
   const res = { ...prevFilters };
   for (const key in val) {
-    if (key in res && val[key] !== undefined) {
+    if (key in res && val[key] != undefined) {
       res[key] = val[key];
     }
   }
-  console.log(res);
   return res;
 };
 

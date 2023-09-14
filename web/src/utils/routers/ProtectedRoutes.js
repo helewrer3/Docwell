@@ -3,15 +3,17 @@ import { Route, Routes } from "react-router-dom";
 
 import Dashboard from "../../dashboard";
 import PageNotFound from "../components/PageNotFound";
-import { path } from "./routes";
+import UploadReport from "../../uploadReport";
 import FilterPage from "../../filterPage";
+import BackupData from "../../backupData";
+import { path } from "./routes";
 import { strings } from "../helper/strings";
 
 const { tables } = strings;
 
 const ProtectedRoutes = () => (
   <Routes>
-    <Route path={path.entry} element={<Dashboard />} />
+    <Route path={path.entry} element={<Dashboard sidebarKey="1" />} />
     <Route
       path={path.patient}
       element={
@@ -42,6 +44,8 @@ const ProtectedRoutes = () => (
         />
       }
     />
+    <Route path={path.upload} element={<UploadReport sidebarKey="5" />} />
+    <Route path={path.backup} element={<BackupData sidebarKey="6" />} />
     <Route path={path.catchall} element={<PageNotFound />} />
   </Routes>
 );

@@ -6,6 +6,8 @@ import {
   MedicineBoxOutlined,
   UserOutlined,
   SolutionOutlined,
+  CloudUploadOutlined,
+  DownloadOutlined,
 } from "@ant-design/icons";
 
 import { path } from "../routers/routes";
@@ -32,6 +34,16 @@ const menuItems = [
     key: "4",
     icon: <MedicineBoxOutlined />,
     label: <Link to={path.medicine}> Medicines </Link>,
+  },
+  {
+    key: "5",
+    icon: <CloudUploadOutlined />,
+    label: <Link to={path.upload}> Upload Reports </Link>,
+  },
+  {
+    key: "6",
+    icon: <DownloadOutlined />,
+    label: <Link to={path.backup}> Backup Data </Link>,
   },
 ];
 
