@@ -31,10 +31,8 @@ const props = {
 const onFinish = async (values) => {
   const { upload, visit_id } = values;
   const formData = new FormData();
-  upload.fileList.forEach((file, i) => {
-    formData.append(`image_${i}`, file);
-  });
-
+  for (let index = 0; index < upload.length; index++)
+    formData.append("image", upload[index]);
   try {
     await axios.post(
       `${process.env.REACT_APP_SERVER_URL}/azure/storage/${visit_id}`,
@@ -69,7 +67,13 @@ const UploadReport = ({ sidebarKey }) => {
         <Form name="upload-report" onFinish={onFinish}>
           <Row>
             <Col xs={24}>
-              <Item name="upload">
+              <Item
+                name="upload"
+                getValueFromEvent={({ fileList }) => {
+                  const newList = fileList.map((file) => file.originFileObj);
+                  return newList;
+                }}
+              >
                 <Dragger {...props}>
                   <p className="ant-upload-drag-icon">
                     <InboxOutlined />

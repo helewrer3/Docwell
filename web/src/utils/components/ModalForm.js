@@ -11,7 +11,7 @@ import {
 } from "antd";
 import moment from "moment";
 
-import { prettify } from "../helper/strings";
+import { prettify, strings } from "../helper/strings";
 import { getFromStorage } from "../helper/localStorage";
 
 const { Item } = Form;
@@ -67,6 +67,7 @@ const ModalForm = ({
                     varchar: (
                       <Input
                         allowClear={true}
+                        disabled={column.COLUMN_NAME == strings.rows.reportsURL}
                         defaultValue={initData[column.COLUMN_NAME]}
                         required={true}
                       />

@@ -1,8 +1,8 @@
 const { connection } = require("./getConnection");
 
-const addIntoDB = async ({ tableName, dataToInsert }) => {
-  const columns = [];
-  const values = [];
+const addIntoDB = async ({ tableName, dataToInsert, filters = {} }) => {
+  const columns = [],
+    values = [];
 
   for (const data in dataToInsert) {
     if (dataToInsert[data]) {

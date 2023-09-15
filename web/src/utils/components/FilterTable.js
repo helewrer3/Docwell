@@ -64,6 +64,11 @@ const getTableData = async ({
       )
         .utc()
         .format("YYYY-MM-DD");
+      res.data[i][strings.rows.dateOfVisit] = moment(
+        row[strings.rows.dateOfVisit]
+      )
+        .utc()
+        .format("YYYY-MM-DD");
     });
     setDataSource(res.data);
   } catch (error) {

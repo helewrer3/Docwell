@@ -4,7 +4,7 @@ const getReferencedNames = async ({ tableName, rows }) => {
   let foreignKeyColumn = null,
     referencedTable = null;
   if (tableName == "visits") {
-    foreignKeyColumn = "patients_id";
+    foreignKeyColumn = "patient_id";
     referencedTable = "patients";
   } else if (tableName == "medicines") {
     foreignKeyColumn = "manufacturer_id";
