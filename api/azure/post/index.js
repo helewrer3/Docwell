@@ -66,10 +66,9 @@ const uploadToStorage = async (req, res) => {
 
     res
       .status(200)
-      .json({ message: "Files uploaded successfully", payload: reportsUrl });
+      .json({ message: "Files uploaded successfully.", payload: reportsUrl });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Error uploading files" });
+    res.status(500).json({ message: "Error uploading files.", payload: error });
   }
 };
 module.exports = { uploadToStorage };

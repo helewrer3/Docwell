@@ -60,8 +60,7 @@ const extractDataRecords = async (req, res) => {
       archive.pipe(res);
     });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "F" });
+    res.status(500).json({ message: "Error extracting data.", payload: error });
   }
 };
 

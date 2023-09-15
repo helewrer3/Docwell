@@ -18,7 +18,9 @@ const getDataRecords = async (req, res) => {
     res.status(200).json(result);
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: "Error getting table entries.", error });
+    res
+      .status(500)
+      .json({ message: "Error getting table entries.", payload: error });
   }
 };
 
@@ -33,7 +35,9 @@ const getDataMeta = async (req, res) => {
     }
     res.status(200).json(meta);
   } catch (error) {
-    res.status(500).json({ message: "Error getting database meta.", error });
+    res
+      .status(500)
+      .json({ message: "Error getting database meta.", payload: error });
   }
 };
 
@@ -46,7 +50,9 @@ const getTableMeta = async (req, res) => {
     res.status(200).json(meta);
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: "Error getting database meta.", error });
+    res
+      .status(500)
+      .json({ message: "Error getting table meta.", payload: error });
   }
 };
 

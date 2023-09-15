@@ -21,8 +21,9 @@ const getUser = async (req, res) => {
       else throw "Password not found";
     } else throw "Username not found";
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Error getting table entries.", error });
+    res
+      .status(500)
+      .json({ message: "Error getting user entry.", payload: error });
   }
 };
 
@@ -31,8 +32,9 @@ const isUserValid = async (req, res) => {
     const { token } = req.params;
     res.status(200).json({ token: "YES" });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Error getting table entries.", error });
+    res
+      .status(500)
+      .json({ message: "Error getting user entry.", payload: error });
   }
 };
 
