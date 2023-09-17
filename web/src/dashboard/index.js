@@ -9,6 +9,7 @@ import {
   Statistic,
   Avatar,
   notification,
+  Typography,
 } from "antd";
 import axios from "axios";
 import moment from "moment";
@@ -24,6 +25,7 @@ import { path } from "../utils/routers/routes";
 import FilterTable from "../utils/components/FilterTable";
 
 const { Content } = Layout;
+const { Title } = Typography;
 
 const getStats = async ({ setVisitsWeek, setIsLoading }) => {
   let visCount = 0;
@@ -124,7 +126,7 @@ const Dashboard = ({ sidebarKey }) => {
           background: "#ffffff",
         }}
       >
-        <Row>
+        <Row gutter={16}>
           <Col xs={24} sm={6}>
             <Card>
               <Row justify="center">
@@ -167,7 +169,10 @@ const Dashboard = ({ sidebarKey }) => {
           </Col>
         </Row>
         {isAdmin ? (
-          <Row>
+          <Row gutter={16}>
+            <Col xs={24}>
+              <Title level={4}>User Requests</Title>
+            </Col>
             <Col xs={24}>
               <FilterTable
                 key={"user_accounts"}

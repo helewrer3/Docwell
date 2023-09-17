@@ -57,13 +57,16 @@ const BackupData = ({ sidebarKey }) => {
           margin: "1em 1em",
           padding: "1em",
           background: "#ffffff",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
         }}
       >
         <Row>
           <Col xs={24}>
             <Button
               type="primary"
-              style={{ width: "100%" }}
+              style={{ width: "100%", height: "50px" }}
               onClick={handleClick}
             >
               Backup Data

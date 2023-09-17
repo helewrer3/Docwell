@@ -91,7 +91,9 @@ const ModalForm = ({
                     bigint: (
                       <IdSelect
                         tableName={tableName}
-                        disabled={i == 0}
+                        disabled={column.COLUMN_NAME.includes(
+                          tableName.substr(0, tableName.length - 1)
+                        )}
                         callback={handleSelect}
                       />
                     ),

@@ -4,23 +4,37 @@ const { BlobServiceClient } = require("@azure/storage-blob");
 const { updateIntoDB } = require("../../utils/database/updateIntoDB");
 
 const getMergedPdf = async ({ files }) => {
-  const pdfDoc = await PDFDocument.create();
+  try {
+    const pdfDoc = await PDFDocument.create();
 
-  for (const file of files) {
-    const { originalname, buffer } = file,
-      image = await pdfDoc.embedPng(buffer),
-      page = pdfDoc.addPage([image.width, image.height]),
-      { width, height } = page.getSize();
+    for (const file of files) {
+      const { originalname, buffer } = file;
+      let image;
 
-    page.drawImage(image, {
-      x: 0,
-      y: 0,
-      width,
-      height,
-    });
+      if (originalname.toLowerCase().endsWith(".png"))
+        image = await pdfDoc.embedPng(buffer);
+      else if (
+        originalname.toLowerCase().endsWith(".jpg") ||
+        originalname.toLowerCase().endsWith(".jpeg")
+      )
+        image = await pdfDoc.embedJpg(buffer);
+      else throw "Not supported files.";
+
+      const page = pdfDoc.addPage([image.width, image.height]),
+        { width, height } = page.getSize();
+
+      page.drawImage(image, {
+        x: 0,
+        y: 0,
+        width,
+        height,
+      });
+    }
+    const pdfBytes = await pdfDoc.save();
+    return pdfBytes;
+  } catch (error) {
+    throw error;
   }
-  const pdfBytes = await pdfDoc.save();
-  return pdfBytes;
 };
 
 const uploadToAzureStorage = async ({ pdf, visit_id }) => {
