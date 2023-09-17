@@ -1,19 +1,10 @@
-import React from "react";
-import {
-  Modal,
-  Form,
-  Input,
-  Row,
-  Col,
-  DatePicker,
-  Button,
-  InputNumber,
-} from "antd";
+import React, { useState } from "react";
+import { Modal, Form, Input, Row, Col, DatePicker, Button, Select } from "antd";
 import moment from "moment";
 
 import { prettify, strings } from "../helper/strings";
 import { getFromStorage } from "../helper/localStorage";
-
+import IdSelect from "./IdSelect";
 const { Item } = Form;
 
 const ModalForm = ({
@@ -24,6 +15,11 @@ const ModalForm = ({
   onCancel,
 }) => {
   const onFinish = (values) => {
+    values[
+      tableName == strings.tables.visits
+        ? strings.rows.patientID
+        : strings.rows.manufacturerID
+    ] = selectedId;
     rows.forEach((column) => {
       if (values[column.COLUMN_NAME]) {
         if (column.DATA_TYPE === "date")
@@ -41,7 +37,13 @@ const ModalForm = ({
     });
     callback(values);
   };
+
+  const handleSelect = (value) => {
+    setSelectedId(value);
+  };
+
   const rows = getFromStorage({ name: "database" })[tableName];
+  const [selectedId, setSelectedId] = useState(0);
 
   return (
     <Modal
@@ -61,30 +63,36 @@ const ModalForm = ({
               <Item
                 label={prettify[column.COLUMN_NAME]}
                 name={column.COLUMN_NAME}
+                required={true}
               >
                 {
                   {
-                    varchar: (
-                      <Input
-                        allowClear={true}
-                        disabled={column.COLUMN_NAME == strings.rows.reportsURL}
-                        defaultValue={initData[column.COLUMN_NAME]}
-                        required={true}
-                      />
-                    ),
+                    varchar:
+                      column.COLUMN_NAME != strings.rows.sex ? (
+                        <Input
+                          allowClear={true}
+                          defaultValue={initData[column.COLUMN_NAME]}
+                        />
+                      ) : (
+                        <Select
+                          options={[
+                            { label: "Male", value: "male" },
+                            { label: "Female", value: "female" },
+                            { label: "Other", value: "other" },
+                          ]}
+                        />
+                      ),
                     date: (
                       <DatePicker
                         allowClear={true}
                         defaultValue={initData[column.COLUMN_NAME]}
-                        required={true}
                       />
                     ),
                     bigint: (
-                      <InputNumber
-                        allowClear={true}
-                        disabled={i === 0}
-                        defaultValue={initData[column.COLUMN_NAME]}
-                        required={true}
+                      <IdSelect
+                        tableName={tableName}
+                        disabled={i == 0}
+                        callback={handleSelect}
                       />
                     ),
                   }[column.DATA_TYPE]

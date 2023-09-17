@@ -46,7 +46,7 @@ const FilterPage = ({ tableName = "", sidebarKey = "" }) => {
       >
         <Row justify="end">
           <Col xs={24} sm={6} md={4} lg={3} xl={2}>
-            <AddData tableName={tableName} />
+            <AddData tableName={tableName} key={tableName} />
           </Col>
         </Row>
         <Row>

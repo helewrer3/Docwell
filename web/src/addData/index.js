@@ -36,7 +36,7 @@ const AddData = ({ tableName = "" }) => {
       notification.open({
         type: "error",
         message: "Error",
-        description: "Couldn't add data into database, try again later.",
+        description: "Couldn't add data into database, check your values.",
       });
     }
     setOpen(false);
@@ -59,6 +59,7 @@ const AddData = ({ tableName = "" }) => {
         callback={callback}
         tableName={tableName}
         open={open}
+        key={tableName}
         onCancel={handleCancel}
       />
     </>

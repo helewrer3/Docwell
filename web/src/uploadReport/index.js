@@ -73,6 +73,7 @@ const UploadReport = ({ sidebarKey }) => {
                   const newList = fileList.map((file) => file.originFileObj);
                   return newList;
                 }}
+                required={true}
               >
                 <Dragger {...props}>
                   <p className="ant-upload-drag-icon">
@@ -93,6 +94,7 @@ const UploadReport = ({ sidebarKey }) => {
               <Item
                 label={prettify[strings.rows.visitID]}
                 name={strings.rows.visitID}
+                required={true}
               >
                 <InputNumber
                   allowClear={true}
