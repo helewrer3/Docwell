@@ -23,6 +23,7 @@ const { rows } = strings;
 
 const onFinish = async ({ values, navigate, isLogin }) => {
   try {
+    let msg = "";
     if (isLogin) {
       const res = await axios.get(`${process.env.REACT_APP_SERVER_URL}/auth/`, {
         params: {
@@ -30,25 +31,24 @@ const onFinish = async ({ values, navigate, isLogin }) => {
         },
       });
       saveToStorage({ name: "token", data: res.data.token });
-    } else {
-      const res = await axios.post(
-        `${process.env.REACT_APP_SERVER_URL}/auth/`,
-        {
-          ...values,
-        }
-      );
-      saveToStorage({ name: "token", data: res.data.token });
-    }
+      saveToStorage({ name: "name", data: res.data.name });
 
-    const res = await axios.get(
-      `${process.env.REACT_APP_SERVER_URL}/data/meta`
-    );
-    saveToStorage({ name: "database", data: res.data });
+      const resMeta = await axios.get(
+        `${process.env.REACT_APP_SERVER_URL}/data/meta`
+      );
+      saveToStorage({ name: "database", data: resMeta.data });
+      msg = "User successfully logged in.";
+    } else {
+      await axios.post(`${process.env.REACT_APP_SERVER_URL}/auth/`, {
+        ...values,
+      });
+      msg = "Please wait for the admins to approve your request.";
+    }
     navigate(path.entry);
     notification.open({
       type: "success",
       message: "Welcome!",
-      description: "User logged in successfully.",
+      description: msg,
     });
   } catch (error) {
     console.log(error);

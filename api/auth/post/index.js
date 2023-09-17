@@ -1,6 +1,4 @@
 const bcrypt = require("bcrypt");
-const argon2 = require("argon2");
-
 const { addIntoDB } = require("../../utils/database/addIntoDB");
 
 const addUser = async (req, res) => {
@@ -17,7 +15,7 @@ const addUser = async (req, res) => {
       },
     });
 
-    res.status(201).json({ token: await argon2.hash(name) });
+    res.status(201).json({ message: "ok" });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Error logging you in.", payload: error });

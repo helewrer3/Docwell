@@ -5,8 +5,8 @@ const updateIntoDB = async ({ tableName, dataToUpdate, filters = {} }) => {
     values = [];
 
   for (const data in dataToUpdate) {
-    if (dataToInsert[data]) {
-      values.push(`SET ${data} = '${dataToInsert[data]}'`);
+    if (dataToUpdate[data]) {
+      values.push(`SET ${data} = '${dataToUpdate[data]}'`);
     }
   }
 

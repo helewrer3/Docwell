@@ -15,9 +15,13 @@ import moment from "moment";
 
 import Sidebar from "../utils/components/Sidebar";
 import { strings } from "../utils/helper/strings";
-import { deleteFromStorage } from "../utils/helper/localStorage";
+import {
+  deleteFromStorage,
+  getFromStorage,
+} from "../utils/helper/localStorage";
 import { useNavigate } from "react-router-dom";
 import { path } from "../utils/routers/routes";
+import FilterTable from "../utils/components/FilterTable";
 
 const { Content } = Layout;
 
@@ -59,13 +63,55 @@ const getStats = async ({ setVisitsWeek, setIsLoading }) => {
   setIsLoading(false);
 };
 
+const verifyUserSignup = async ({ record }) => {
+  try {
+    await axios.put(`${process.env.REACT_APP_SERVER_URL}/auth`, {
+      name: record.name,
+    });
+    notification.open({
+      message: "User Verified!",
+      description: "Please refresh to reflect the changes.",
+      type: "success",
+    });
+  } catch (error) {
+    console.log(error);
+    notification.open({
+      message: "Error verifying user",
+      description: "Please try again later.",
+      type: "error",
+    });
+  }
+};
+
+const checkIfAdmin = async ({ setIsAdmin }) => {
+  try {
+    const user = getFromStorage({ name: "name" });
+    const response = await axios.get(
+      `${process.env.REACT_APP_SERVER_URL}/auth/${user}`
+    );
+    setIsAdmin(response.data.isAdmin == 0 ? false : true);
+  } catch (error) {
+    console.log(error);
+    notification.open({
+      message: "Error checking adminship",
+      description: "Please try again later.",
+      type: "error",
+    });
+  }
+};
+
 const Dashboard = ({ sidebarKey }) => {
   const [visitsWeek, setVisitsWeek] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    getStats({ setVisitsWeek, setIsLoading });
+    const doStuff = async () => {
+      await getStats({ setVisitsWeek, setIsLoading });
+      await checkIfAdmin({ setIsAdmin });
+    };
+    doStuff();
   }, []);
 
   return (
@@ -120,6 +166,20 @@ const Dashboard = ({ sidebarKey }) => {
             </Card>
           </Col>
         </Row>
+        {isAdmin ? (
+          <Row>
+            <Col xs={24}>
+              <FilterTable
+                key={"user_accounts"}
+                filters={{ is_user: 0 }}
+                tableName={"user_accounts"}
+                callback={verifyUserSignup}
+              />
+            </Col>
+          </Row>
+        ) : (
+          <></>
+        )}
       </Content>
     </Layout>
   );

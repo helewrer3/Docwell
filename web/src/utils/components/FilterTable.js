@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Table, notification } from "antd";
+import { Table, notification, Space, Button } from "antd";
 import axios from "axios";
 import moment from "moment";
 
 import { prettify, strings } from "../helper/strings";
 import { getFromStorage } from "../helper/localStorage";
 
-const columns = ({ tableName }) => {
+const columns = ({ tableName, callback = null }) => {
   const rows = getFromStorage({ name: "database" })[tableName];
   return rows.map((column) => ({
     title: prettify[column.COLUMN_NAME],
@@ -15,7 +15,6 @@ const columns = ({ tableName }) => {
   }));
 };
 
-// TODO: Fetch data from DB
 const getTableMeta = async ({ tableName, filters, setTotalPage }) => {
   try {
     const res = await axios.get(
@@ -82,7 +81,7 @@ const getTableData = async ({
   setIsLoading(false);
 };
 
-const FilterTable = ({ filters = {}, tableName = "" }) => {
+const FilterTable = ({ filters = {}, tableName = "", callback = null }) => {
   const [dataSource, setDataSource] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [totalPage, setTotalPage] = useState(0);
@@ -102,7 +101,7 @@ const FilterTable = ({ filters = {}, tableName = "" }) => {
       <Table
         dataSource={dataSource}
         loading={isLoading}
-        columns={columns({ tableName })}
+        columns={columns({ tableName, callback })}
         onChange={async (pagination) => {
           await getTableData({
             tableName,
@@ -116,6 +115,18 @@ const FilterTable = ({ filters = {}, tableName = "" }) => {
         pagination={{
           total: totalPage,
           defaultPageSize: 20,
+        }}
+        style={{
+          "text-overflow": "ellipsis",
+          overflow: "hidden",
+          "white-space": "nowrap",
+        }}
+        onRow={(record, rowIndex) => {
+          return {
+            onClick: (event) => {
+              callback({ record });
+            },
+          };
         }}
       />
     </>

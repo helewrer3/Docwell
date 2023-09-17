@@ -11,7 +11,7 @@ const getDBTables = async () => {
 };
 
 const getTableColumns = async ({ tableName }) => {
-  const sqlCmd = `SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '${tableName}' AND COLUMN_NAME NOT IN ('created_at', 'updated_at');`;
+  const sqlCmd = `SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '${tableName}' AND COLUMN_NAME NOT IN ('created_at', 'updated_at', 'password', 'salt');`;
   try {
     const [rows, fields] = await connection.query(sqlCmd);
     return rows;
