@@ -50,4 +50,5 @@ jobs:
 
       - name: Deploy the app
         run: |
-          export $(cat .env | xargs) && docker compose -f "$GITHUB_WORKSPACE/docker-compose.aci.yml" up
+          docker-compose -f "$GITHUB_WORKSPACE/docker-compose.aci.yml" --env-file .env --verbose config
+          export $(cat .env | xargs) && docker compose -f "$GITHUB_WORKSPACE/docker-compose.aci.yml" --verbose up
