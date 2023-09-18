@@ -1,7 +1,7 @@
 version: "3"
 services:
   web:
-    image: ${AZ_REGISTRY_NAME}.azurecr.io/web:latest
+    image: ${AZ_REGISTRY_NAME}.azurecr.io/docwell_web:latest
     build:
       context: ./web
     environment:
@@ -14,7 +14,7 @@ services:
       - mysql
 
   api:
-    image: ${AZ_REGISTRY_NAME}.azurecr.io/api:latest
+    image: ${AZ_REGISTRY_NAME}.azurecr.io/docwell_api:latest
     build:
       context: ./api
     environment:
@@ -35,7 +35,7 @@ services:
       - api-data-prod:/app
 
   scripts:
-    image: ${AZ_REGISTRY_NAME}.azurecr.io/scripts:latest
+    image: ${AZ_REGISTRY_NAME}.azurecr.io/docwell_scripts:latest
     build:
       context: ./scripts
     environment:
