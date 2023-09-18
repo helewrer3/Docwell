@@ -5,7 +5,7 @@ on: [push]
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    environment: production
+    environment: development
 
     steps:
       - name: Checkout code
@@ -17,19 +17,19 @@ jobs:
       - name: Build and push Docker images
         run: |
           chmod +x main.github.sh
+          touch .env
+          echo "DB_HOST=${{ env.DB_HOST }}" >> .env
+          echo "DB_DATABASE=${{ env.DB_DATABASE }}" >> .env
+          echo "DB_USER=${{ env.DB_USER }}" >> .env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+          echo "DB_FIRST_USER=${{ env.DB_FIRST_USER }}" >> .env
+          echo "DB_FIRST_PASSWORD=${{ secrets.DB_FIRST_PASSWORD }}" >> .env
+          echo "DB_VOLUME=${{ env.DB_VOLUME }}" >> .env
+          echo "DB_PORT=${{ env.DB_PORT }}" >> .env
+          echo "SERVER_ENV=${{ env.SERVER_ENV }}" >> .env
+          echo "API_VOLUME=${{ env.API_VOLUME }}" >> .env
+          echo "SERVER_PORT=${{ env.SERVER_PORT }}" >> .env
+          echo "ACR_USERNAME=${{ env.ACR_USERNAME }}" >> .env
+          echo "ACR_PASSWORD=${{ secrets.ACR_PASSWORD }}" >> .env
+          echo "DOCWELL_REPORTS_STORAGE_CONNECTION_STRING=${{ secrets.DOCWELL_REPORTS_STORAGE_CONNECTION_STRING }}" >> .env
           ./main.github.sh
-        env:
-          DB_HOST: ${{ env.DB_HOST }}
-          DB_DATABASE: ${{ env.DB_DATABASE }}
-          DB_USER: ${{ env.DB_USER }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          DB_FIRST_USER: ${{ env.DB_FIRST_USER }}
-          DB_FIRST_PASSWORD: ${{ secrets.DB_FIRST_PASSWORD }}
-          DB_VOLUME: ${{ env.DB_VOLUME }}
-          DB_PORT: ${{ env.DB_PORT }}
-          SERVER_ENV: ${{ env.SERVER_ENV }}
-          API_VOLUME: ${{ env.API_VOLUME }}
-          SERVER_PORT: ${{ env.SERVER_PORT }}
-          ACR_USERNAME: ${{ env.ACR_USERNAME }}
-          ACR_PASSWORD: ${{ secrets.ACR_PASSWORD }}
-          DOCWELL_REPORTS_STORAGE_CONNECTION_STRING: ${{ secrets.DOCWELL_REPORTS_STORAGE_CONNECTION_STRING }}
