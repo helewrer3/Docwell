@@ -5,7 +5,7 @@ on: [push]
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    enviroment: development
+    environment: development
 
     steps:
       - name: Checkout code
