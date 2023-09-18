@@ -14,4 +14,4 @@ A nursing home management app. Manage and record the entries of your patients an
 
 ## Deployment
 
-1. In progress
+1. In progress, pls work.
