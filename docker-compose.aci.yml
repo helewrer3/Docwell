@@ -2,6 +2,7 @@ version: "3"
 services:
   web:
     image: ${AZ_REGISTRY_NAME}.azurecr.io/docwell_web:latest
+    domainname: docwell
     build:
       context: ./web
     environment:
@@ -13,6 +14,8 @@ services:
       - scripts
       - mysql
     deploy:
+      restart_policy:
+        condition: none
       resources:
         limits:
           cpus: "0.5"
@@ -39,6 +42,8 @@ services:
     volumes:
       - api-data-prod:/app
     deploy:
+      restart_policy:
+        condition: none
       resources:
         limits:
           cpus: "0.5"
@@ -59,6 +64,8 @@ services:
     depends_on:
       - mysql
     deploy:
+      restart_policy:
+        condition: none
       resources:
         limits:
           cpus: "0.5"
@@ -72,8 +79,10 @@ services:
     ports:
       - "3307:3307"
     volumes:
-      - api-data-prod:/var/lib/mysql
+      - mysql-data-prod:/var/lib/mysql
     deploy:
+      restart_policy:
+        condition: none
       resources:
         limits:
           cpus: "0.5"
