@@ -1,6 +1,7 @@
 version: "3"
 services:
   web:
+    image: ${AZ_REGISTRY_NAME}.azurecr.io/web:latest
     build:
       context: ./web
     environment:
@@ -13,6 +14,7 @@ services:
       - mysql
 
   api:
+    image: ${AZ_REGISTRY_NAME}.azurecr.io/api:latest
     build:
       context: ./api
     environment:
@@ -26,8 +28,6 @@ services:
       DOCWELL_REPORTS_STORAGE_CONNECTION_STRING: ${DOCWELL_REPORTS_STORAGE_CONNECTION_STRING}
     ports:
       - "8080:8080"
-    links:
-      - mysql
     depends_on:
       - scripts
       - mysql
@@ -35,6 +35,7 @@ services:
       - api-data-prod:/app
 
   scripts:
+    image: ${AZ_REGISTRY_NAME}.azurecr.io/scripts:latest
     build:
       context: ./scripts
     environment:
@@ -45,8 +46,6 @@ services:
       DB_DATABASE: ${DB_DATABASE}
       DB_FIRST_USER: ${DB_FIRST_USER}
       DB_FIRST_PASSWORD: ${DB_FIRST_PASSWORD}
-    links:
-      - mysql
     depends_on:
       - mysql
 

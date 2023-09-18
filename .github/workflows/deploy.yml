@@ -24,6 +24,7 @@ jobs:
           echo "DB_FIRST_USER=${{ vars.DB_FIRST_USER }}" >> .env
           echo "DB_FIRST_PASSWORD=${{ secrets.DB_FIRST_PASSWORD }}" >> .env
           echo "AZ_STORAGE_ACCOUNT_NAME=${{ vars.AZ_STORAGE_ACCOUNT_NAME }}" >> .env
+          echo "AZ_REGISTRY_NAME=${{ vars.AZ_REGISTRY_NAME }}" >> .env
 
       - name: Azure Login
         uses: azure/login@v1
