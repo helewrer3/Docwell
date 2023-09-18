@@ -16,7 +16,7 @@ jobs:
 
       - name: Log in to Azure Container Registry
         run: |
-          docker login azure --client-id ${{ secrets.AZURE_CLIENT_ID }} --client-secret ${{ secrets.AZURE_CLIENT_SECRET }} --tenand-id ${{ secrets.AZURE_TENANT_ID }}
+          docker login azure --client-id ${{ secrets.AZURE_CLIENT_ID }} --client-secret ${{ secrets.AZURE_CLIENT_SECRET }} --tenant-id ${{ secrets.AZURE_TENANT_ID }}
           docker login -u ${{ secrets.ACR_USERNAME }} -p ${{ secrets.ACR_PASSWORD }} ${{ secrets.ACR_USERNAME }}.azurecr.io
 
       - name: Set Docker Context
