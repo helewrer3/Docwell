@@ -34,8 +34,6 @@ services:
     depends_on:
       - scripts
       - mysql
-    volumes:
-      - ${API_VOLUME}:/app
 
   scripts:
     container_name: scripts
@@ -66,5 +64,4 @@ services:
       - ${DB_VOLUME}:/var/lib/mysql
 
 volumes:
-  api-data-prod:
   mysql-data-prod:
