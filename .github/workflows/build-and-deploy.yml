@@ -36,4 +36,11 @@ jobs:
       - name: Build and push Docker images
         run: |
           docker-compose --env-file .env build
-          docker-compose --env-file .env push
+          docker tag docwell_scripts:latest ${{ vars.ACR_USERNAME }}.azurecr.io/docwell_scripts:${{ github.sha }}
+          docker push ${{ vars.ACR_USERNAME }}.azurecr.io/docwell_scripts:${{ github.sha }}
+          docker tag mysql:latest ${{ vars.ACR_USERNAME }}.azurecr.io/mysql:${{ github.sha }}
+          docker push ${{ vars.ACR_USERNAME }}.azurecr.io/mysql:${{ github.sha }}
+          docker tag docwell_api:latest ${{ vars.ACR_USERNAME }}.azurecr.io/docwell_api:${{ github.sha }}
+          docker push ${{ vars.ACR_USERNAME }}.azurecr.io/docwell_api:${{ github.sha }}
+          docker tag docwell_web:latest ${{ vars.ACR_USERNAME }}.azurecr.io/docwell_web:${{ github.sha }}
+          docker push ${{ vars.ACR_USERNAME }}.azurecr.io/docwell_web:${{ github.sha }}
