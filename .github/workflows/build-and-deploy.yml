@@ -29,8 +29,7 @@ jobs:
           echo "SERVER_ENV=${{ vars.SERVER_ENV }}" >> .env
           echo "API_VOLUME=${{ vars.API_VOLUME }}" >> .env
           echo "SERVER_PORT=${{ vars.SERVER_PORT }}" >> .env
-          echo "ACR_USERNAME=${{ vars.ACR_USERNAME }}" >> .env
-          echo "ACR_PASSWORD=${{ secrets.ACR_PASSWORD }}" >> .env
           echo "DOCWELL_REPORTS_STORAGE_CONNECTION_STRING=${{ secrets.DOCWELL_REPORTS_STORAGE_CONNECTION_STRING }}" >> .env
-          cat .env
-          ./main.github.sh
+          docker-compose -f "$DOCKER_COMPOSE_FILE" --env-file .env build
+          docker login -u ${{ vars.ACR_USERNAME }} -p ${{ secrets.ACR_PASSWORD }} ${{ vars.ACR_USERNAME }}.azurecr.io
+          docker-compose -f "$DOCKER_COMPOSE_FILE" --env-file .env push
