@@ -16,7 +16,6 @@ jobs:
 
       - name: Build and push Docker images
         run: |
-          chmod +x main.github.sh
           touch .env
           echo "DB_HOST=${{ vars.DB_HOST }}" >> .env
           echo "DB_DATABASE=${{ vars.DB_DATABASE }}" >> .env
