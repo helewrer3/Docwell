@@ -32,4 +32,5 @@ jobs:
           echo "ACR_USERNAME=${{ env.ACR_USERNAME }}" >> .env
           echo "ACR_PASSWORD=${{ secrets.ACR_PASSWORD }}" >> .env
           echo "DOCWELL_REPORTS_STORAGE_CONNECTION_STRING=${{ secrets.DOCWELL_REPORTS_STORAGE_CONNECTION_STRING }}" >> .env
+          cat .env
           ./main.github.sh
