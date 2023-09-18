@@ -15,9 +15,11 @@ jobs:
         run: docker-compose --version
 
       - name: Log in to Azure Container Registry
+        run: docker login -u ${{ vars.ACR_USERNAME }} -p ${{ secrets.ACR_PASSWORD }} ${{ vars.ACR_USERNAME }}.azurecr.io
+
+      - name: Set Docker Context
         run: |
-          curl -L https://raw.githubusercontent.com/docker/compose-cli/main/scripts/install/install_linux.sh | sh
-          docker login azure --tenant-id ${{ secrets.AZURE_TENANT_ID }} --client-id ${{ secrets.AZURE_CLIENT_ID }} --client-secret ${{ secrets.AZURE_CLIENT_SECRET }}
+          docker context create aci docwellcontext
           docker context use docwellcontext
 
       - name: Setup .env file
@@ -32,10 +34,8 @@ jobs:
           echo "DB_VOLUME=${{ vars.DB_VOLUME }}" >> .env
           echo "DB_PORT=${{ vars.DB_PORT }}" >> .env
           echo "SERVER_ENV=${{ vars.SERVER_ENV }}" >> .env
+          echo "API_VOLUME=${{ vars.API_VOLUME }}" >> .env
           echo "SERVER_PORT=${{ vars.SERVER_PORT }}" >> .env
-          echo "ASA_NAME=${{ vars.ASA_NAME }}" >> .env
-          echo "ASA_DB_FILESHARE=${{ vars.ASA_DB_FILESHARE }}" >> .env
-          echo "DOMAIN_NAME=${{ vars.DOMAIN_NAME }}" >> .env
           echo "DOCWELL_REPORTS_STORAGE_CONNECTION_STRING=${{ secrets.DOCWELL_REPORTS_STORAGE_CONNECTION_STRING }}" >> .env
 
       - name: Build Docker Images
@@ -44,4 +44,12 @@ jobs:
 
       - name: Push Docker Images
         run: |
-          docker-compose --env-file .env up
+          docker-compose --env-file .env build
+          docker tag docwell_scripts:latest ${{ vars.ACR_USERNAME }}.azurecr.io/docwell_scripts:latest
+          docker push ${{ vars.ACR_USERNAME }}.azurecr.io/docwell_scripts:latest
+          docker tag docwell_api:latest ${{ vars.ACR_USERNAME }}.azurecr.io/docwell_api:latest
+          docker push ${{ vars.ACR_USERNAME }}.azurecr.io/docwell_api:latest
+          docker tag docwell_web:latest ${{ vars.ACR_USERNAME }}.azurecr.io/docwell_web:latest
+          docker push ${{ vars.ACR_USERNAME }}.azurecr.io/docwell_web:latest
+          docker tag mysql:latest ${{ vars.ACR_USERNAME }}.azurecr.io/mysql:latest
+          docker push ${{ vars.ACR_USERNAME }}.azurecr.io/mysql:latest

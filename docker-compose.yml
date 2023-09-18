@@ -1,6 +1,7 @@
 version: "3"
 services:
   web:
+    domainname: ${DOMAIN_NAME}
     build:
       context: ./web
     environment:
@@ -13,7 +14,6 @@ services:
       - mysql
 
   api:
-    domainname: "${DOMAIN_NAME}"
     build:
       context: ./api
     environment:
@@ -32,6 +32,8 @@ services:
     depends_on:
       - scripts
       - mysql
+    volumes:
+      - ${API_VOLUME}:/app
 
   scripts:
     build:
@@ -60,8 +62,5 @@ services:
       - ${DB_VOLUME}:/var/lib/mysql
 
 volumes:
+  api-data-prod:
   mysql-data-prod:
-    driver: azure_file
-    driver_opts:
-      share_name: ${ASA_DB_FILESHARE}
-      storage_account_name: ${ASA_NAME}
