@@ -1,0 +1,25 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Compose
+        run: docker-compose --version
+
+      - name: Build and push Docker images
+        run: |
+          docker-compose build
+          docker login -u ${{ env.ACR_USERNAME }} -p ${{ secrets.ACR_PASSWORD }} ${{ env.ACR_USERNAME }}.azurecr.io
+          docker-compose push
+        env:
+          DOCKER_BUILDKIT: 1
