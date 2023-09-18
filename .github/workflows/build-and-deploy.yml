@@ -18,13 +18,13 @@ jobs:
         run: |
           chmod +x main.github.sh
           touch .env
-          echo "DB_HOST=${{ env.DB_HOST }}" >> .env
+          echo "DB_HOST=${{ vars.DB_HOST }}" >> .env
           echo "DB_DATABASE=${{ env.DB_DATABASE }}" >> .env
           echo "DB_USER=${{ env.DB_USER }}" >> .env
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
           echo "DB_FIRST_USER=${{ env.DB_FIRST_USER }}" >> .env
           echo "DB_FIRST_PASSWORD=${{ secrets.DB_FIRST_PASSWORD }}" >> .env
-          echo "DB_VOLUME=${{ env.DB_VOLUME }}" >> .env
+          echo "DB_VOLUME=${{ vars.DB_VOLUME }}" >> .env
           echo "DB_PORT=${{ env.DB_PORT }}" >> .env
           echo "SERVER_ENV=${{ env.SERVER_ENV }}" >> .env
           echo "API_VOLUME=${{ env.API_VOLUME }}" >> .env
