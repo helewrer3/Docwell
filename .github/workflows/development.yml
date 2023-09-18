@@ -19,7 +19,20 @@ jobs:
       - name: Build and push Docker images
         run: |
           docker-compose build
-          docker login -u ${{ env.ACR_USERNAME }} -p ${{ secrets.ACR_PASSWORD }} ${{ env.ACR_USERNAME }}.azurecr.io
+          docker login -u $ACR_USERNAME -p $ACR_PASSWORD $ACR_USERNAME.azurecr.io
           docker-compose push
         env:
-          DOCKER_BUILDKIT: 1
+          DB_HOST: ${{ env.DB_HOST }}
+          DB_DATABASE: ${{ env.DB_DATABASE }}
+          DB_USER: ${{ DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_FIRST_USER: ${{ env.DB_FIRST_USER }}
+          DB_FIRST_PASSWORD: ${{ secrets.DB_FIRST_PASSWORD }}
+          DB_VOLUME: ${{ env.DB_VOLUME }}
+          DB_PORT: ${{ DB_PORT }}
+          SERVER_ENV: ${{ SERVER_ENV }}
+          API_VOLUME: ${{ API_VOLUME }}
+          SERVER_PORT: ${{ SERVER_PORT }}
+          ACR_USERNAME: ${{ env.ACR_USERNAME }}
+          ACR_PASSWORD: ${{ secrets.ACR_PASSWORD }}
+          DOCWELL_REPORTS_STORAGE_CONNECTION_STRING: ${{ secrets.DOCWELL_REPORTS_STORAGE_CONNECTION_STRING }}
