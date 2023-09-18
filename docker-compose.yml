@@ -25,7 +25,7 @@ services:
       DB_DATABASE: ${DB_DATABASE}
       DOCWELL_REPORTS_STORAGE_CONNECTION_STRING: ${DOCWELL_REPORTS_STORAGE_CONNECTION_STRING}
     ports:
-      - "${SERVER_PORT}:${SERVER_PORT}"
+      - "8080:8080"
     links:
       - ${DB_HOST}
     depends_on:
@@ -57,7 +57,7 @@ services:
       MYSQL_TCP_PORT: ${DB_PORT}
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "${DB_PORT}:${DB_PORT}"
+      - "3307:3307"
     volumes:
       - ${DB_VOLUME}:/var/lib/mysql
 
