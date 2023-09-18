@@ -12,6 +12,11 @@ services:
       - api
       - scripts
       - mysql
+    deploy:
+      resources:
+        limits:
+          cpu: 1.0
+          memory: 1g
 
   api:
     image: ${AZ_REGISTRY_NAME}.azurecr.io/docwell_api:latest
@@ -33,6 +38,11 @@ services:
       - mysql
     volumes:
       - api-data-prod:/app
+    deploy:
+      resources:
+        limits:
+          cpu: 1.0
+          memory: 1g
 
   scripts:
     image: ${AZ_REGISTRY_NAME}.azurecr.io/docwell_scripts:latest
@@ -48,6 +58,11 @@ services:
       DB_FIRST_PASSWORD: ${DB_FIRST_PASSWORD}
     depends_on:
       - mysql
+    deploy:
+      resources:
+        limits:
+          cpu: 1.0
+          memory: 1g
 
   mysql:
     image: mysql:latest
@@ -58,6 +73,11 @@ services:
       - "3307:3307"
     volumes:
       - api-data-prod:/var/lib/mysql
+    deploy:
+      resources:
+        limits:
+          cpu: 1.0
+          memory: 1g
 
 volumes:
   api-data-prod:
