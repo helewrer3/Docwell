@@ -1,0 +1,28 @@
+name: Build
+
+on:
+  - push
+  - workflow_dispatch
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    environment: production
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.CI_AZURE_CREDENTIALS }}
+
+      - name: Build image
+        run: |
+          az acr build --image "${{ vars.AZ_REGISTRY_NAME }}.azurecr.io/docwell_api:latest" --registry "$REGISTRY_NAME" "$GITHUB_WORKSPACE/api"
+          az acr build --image "${{ vars.AZ_REGISTRY_NAME }}.azurecr.io/docwell_web:latest" --registry "$REGISTRY_NAME" "$GITHUB_WORKSPACE/web"
+          az acr build --image "${{ vars.AZ_REGISTRY_NAME }}.azurecr.io/docwell_scripts:latest" --registry "$REGISTRY_NAME" "$GITHUB_WORKSPACE/scripts"
