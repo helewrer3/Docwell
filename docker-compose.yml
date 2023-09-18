@@ -25,7 +25,7 @@ services:
       DB_DATABASE: ${DB_DATABASE}
       DOCWELL_REPORTS_STORAGE_CONNECTION_STRING: ${DOCWELL_REPORTS_STORAGE_CONNECTION_STRING}
     ports:
-      - "8080:8080"
+      - "${SERVER_PORT}:${SERVER_PORT}"
     links:
       - ${DB_HOST}
     depends_on:

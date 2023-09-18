@@ -15,9 +15,8 @@ jobs:
 
       - name: Build and push Docker images
         run: |
-          docker-compose build
-          docker login -u $ACR_USERNAME -p $ACR_PASSWORD $ACR_USERNAME.azurecr.io
-          docker-compose push
+          chmod +x main.github.sh
+          ./main.github.sh
         env:
           DB_HOST: ${{ env.DB_HOST }}
           DB_DATABASE: ${{ env.DB_DATABASE }}
