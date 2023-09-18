@@ -45,7 +45,8 @@ jobs:
       - name: Create ACI context
         run: |
           docker context create aci acictx --resource-group "Docwell" --location "centralindia" --subscription-id "a554a48b-0200-4365-8ad0-e8fb6434dce6"
+          docker context use acictx
 
       - name: Deploy the app
         run: |
-          docker compose --context acictx up -f "$GITHUB_WORKSPACE/docker-compose.aci.yml" --env-file .env
+          docker compose -f "$GITHUB_WORKSPACE/docker-compose.aci.yml" --env-file .env up
