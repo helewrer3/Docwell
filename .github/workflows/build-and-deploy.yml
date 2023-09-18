@@ -45,11 +45,11 @@ jobs:
       - name: Push Docker Images
         run: |
           docker-compose --env-file .env build
-          docker tag docwell_scripts:latest ${{ vars.ACR_USERNAME }}.azurecr.io/docwell_scripts:latest
-          docker push ${{ vars.ACR_USERNAME }}.azurecr.io/docwell_scripts:latest
-          docker tag docwell_api:latest ${{ vars.ACR_USERNAME }}.azurecr.io/docwell_api:latest
-          docker push ${{ vars.ACR_USERNAME }}.azurecr.io/docwell_api:latest
-          docker tag docwell_web:latest ${{ vars.ACR_USERNAME }}.azurecr.io/docwell_web:latest
-          docker push ${{ vars.ACR_USERNAME }}.azurecr.io/docwell_web:latest
-          docker tag mysql:latest ${{ vars.ACR_USERNAME }}.azurecr.io/mysql:latest
-          docker push ${{ vars.ACR_USERNAME }}.azurecr.io/mysql:latest
+          docker tag docwell_scripts:latest ${{ secrets.ACR_USERNAME }}.azurecr.io/docwell_scripts:latest
+          docker push ${{ secrets.ACR_USERNAME }}.azurecr.io/docwell_scripts:latest
+          docker tag docwell_api:latest ${{ secrets.ACR_USERNAME }}.azurecr.io/docwell_api:latest
+          docker push ${{ secrets.ACR_USERNAME }}.azurecr.io/docwell_api:latest
+          docker tag docwell_web:latest ${{ secrets.ACR_USERNAME }}.azurecr.io/docwell_web:latest
+          docker push ${{ secrets.ACR_USERNAME }}.azurecr.io/docwell_web:latest
+          docker tag mysql:latest ${{ secrets.ACR_USERNAME }}.azurecr.io/mysql:latest
+          docker push ${{ secrets.ACR_USERNAME }}.azurecr.io/mysql:latest
