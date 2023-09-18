@@ -1,6 +1,8 @@
 name: Deploy
 
-on: workflow_dispatch
+on:
+  - push
+  - workflow_dispatch
 
 jobs:
   main:
@@ -42,8 +44,7 @@ jobs:
 
       - name: Create ACI context
         run: |
-          SUBSCRIPTION_ID=$(az account show --query id --output tsv)
-          docker context create aci acictx --resource-group "$RESOURCE_GROUP" --location "$AZURE_REGION" --subscription-id "$SUBSCRIPTION_ID"
+          docker context create aci acictx --resource-group "$RESOURCE_GROUP" --location "$AZURE_REGION" --subscription-id "a554a48b-0200-4365-8ad0-e8fb6434dce6"
 
       - name: Deploy the app
         run: |
