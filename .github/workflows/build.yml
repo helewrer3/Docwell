@@ -7,7 +7,6 @@ on:
 jobs:
   main:
     runs-on: ubuntu-latest
-    environment: production
     defaults:
       run:
         shell: bash
@@ -23,6 +22,6 @@ jobs:
 
       - name: Build image
         run: |
-          az acr build --image "${{ vars.AZ_REGISTRY_NAME }}.azurecr.io/docwell_api:latest" --registry "$REGISTRY_NAME" "$GITHUB_WORKSPACE/api"
-          az acr build --image "${{ vars.AZ_REGISTRY_NAME }}.azurecr.io/docwell_web:latest" --registry "$REGISTRY_NAME" "$GITHUB_WORKSPACE/web"
-          az acr build --image "${{ vars.AZ_REGISTRY_NAME }}.azurecr.io/docwell_scripts:latest" --registry "$REGISTRY_NAME" "$GITHUB_WORKSPACE/scripts"
+          az acr build --image "${{ vars.AZ_REGISTRY_NAME }}.azurecr.io/docwell_api:latest" --registry "${{ vars.AZ_REGISTRY_NAME }}" "$GITHUB_WORKSPACE/api"
+          az acr build --image "${{ vars.AZ_REGISTRY_NAME }}.azurecr.io/docwell_web:latest" --registry "${{ vars.AZ_REGISTRY_NAME }}" "$GITHUB_WORKSPACE/web"
+          az acr build --image "${{ vars.AZ_REGISTRY_NAME }}.azurecr.io/docwell_scripts:latest" --registry "${{ vars.AZ_REGISTRY_NAME }}" "$GITHUB_WORKSPACE/scripts"
