@@ -31,6 +31,7 @@ jobs:
           echo "SERVER_ENV=${{ vars.SERVER_ENV }}" >> .env
           echo "API_VOLUME=${{ vars.API_VOLUME }}" >> .env
           echo "SERVER_PORT=${{ vars.SERVER_PORT }}" >> .env
+          echo "DOMAIN_NAME=${{ vars.DOMAIN_NAME }}" >> .env
           echo "DOCWELL_REPORTS_STORAGE_CONNECTION_STRING=${{ secrets.DOCWELL_REPORTS_STORAGE_CONNECTION_STRING }}" >> .env
 
       - name: Build Docker Images
@@ -46,5 +47,5 @@ jobs:
           docker push ${{ secrets.ACR_USERNAME }}.azurecr.io/docwell_api:latest
           docker tag docwell_web:latest ${{ secrets.ACR_USERNAME }}.azurecr.io/docwell_web:latest
           docker push ${{ secrets.ACR_USERNAME }}.azurecr.io/docwell_web:latest
-          docker tag mysql:latest ${{ secrets.ACR_USERNAME }}.azurecr.io/mysql:latest
+          docker tag docwell.azurecr.io/agcmysql:latest ${{ secrets.ACR_USERNAME }}.azurecr.io/mysql:latest
           docker push ${{ secrets.ACR_USERNAME }}.azurecr.io/mysql:latest

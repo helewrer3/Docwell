@@ -56,7 +56,7 @@ services:
 
   mysql:
     container_name: mysql
-    image: docwell.azurecr.io/mysql:latest
+    image: docwell.azurecr.io/agcmysql:latest
     environment:
       MYSQL_TCP_PORT: ${DB_PORT}
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
