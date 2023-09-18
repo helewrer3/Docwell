@@ -34,9 +34,10 @@ jobs:
           echo "DOMAIN_NAME=${{ vars.DOMAIN_NAME }}" >> .env
           echo "DOCWELL_REPORTS_STORAGE_CONNECTION_STRING=${{ secrets.DOCWELL_REPORTS_STORAGE_CONNECTION_STRING }}" >> .env
 
-      - name: Build Docker Images
+      - name: Build and Up Docker Images
         run: |
           docker-compose --env-file .env build
+          docker-compose --env-file .env up
 
       - name: Push Docker Images
         run: |
