@@ -15,8 +15,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "1.0"
-          memory: 1g
+          cpus: "0.5"
+          memory: 512M
 
   api:
     image: ${AZ_REGISTRY_NAME}.azurecr.io/docwell_api:latest
@@ -41,8 +41,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "1.0"
-          memory: 1g
+          cpus: "0.5"
+          memory: 512M
 
   scripts:
     image: ${AZ_REGISTRY_NAME}.azurecr.io/docwell_scripts:latest
@@ -61,8 +61,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "1.0"
-          memory: 1g
+          cpus: "0.5"
+          memory: 512M
 
   mysql:
     image: mysql:latest
@@ -76,8 +76,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "1.0"
-          memory: 1g
+          cpus: "0.5"
+          memory: 512M
 
 volumes:
   api-data-prod:
