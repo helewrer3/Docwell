@@ -15,7 +15,7 @@ jobs:
         run: docker-compose --version
 
       - name: Log in to Azure Container Registry
-        run: docker login -u ${{ secrets.ACR_USERNAME }} -p ${{ secrets.ACR_PASSWORD }} ${{ vars.ACR_USERNAME }}.azurecr.io
+        run: docker login -u ${{ vars.ACR_USERNAME }} -p ${{ secrets.ACR_PASSWORD }} ${{ vars.ACR_USERNAME }}.azurecr.io
 
       - name: Setup .env file
         run: |
