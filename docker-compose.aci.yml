@@ -15,7 +15,7 @@ services:
     deploy:
       resources:
         limits:
-          cpu: 1.0
+          cpus: "1.0"
           memory: 1g
 
   api:
@@ -41,7 +41,7 @@ services:
     deploy:
       resources:
         limits:
-          cpu: 1.0
+          cpus: "1.0"
           memory: 1g
 
   scripts:
@@ -61,7 +61,7 @@ services:
     deploy:
       resources:
         limits:
-          cpu: 1.0
+          cpus: "1.0"
           memory: 1g
 
   mysql:
@@ -76,7 +76,7 @@ services:
     deploy:
       resources:
         limits:
-          cpu: 1.0
+          cpus: "1.0"
           memory: 1g
 
 volumes:
