@@ -89,7 +89,7 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy-prod:/etc/caddy
 
 volumes:
   api-data-prod:
@@ -101,4 +101,9 @@ volumes:
     driver: azure_file
     driver_opts:
       share_name: mysqldata
+      storage_account_name: ${AZ_STORAGE_ACCOUNT_NAME}
+  caddy-prod:
+    driver: azure_file
+    driver_opts:
+      share_name: caddyprod
       storage_account_name: ${AZ_STORAGE_ACCOUNT_NAME}
