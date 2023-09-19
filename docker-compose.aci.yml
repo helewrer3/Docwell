@@ -1,5 +1,22 @@
 version: "3"
 services:
+  caddy:
+    image: caddy:latest
+    environment:
+      - CADDY_CONFIG=docwell.centralindia.azurecontainer.io {
+        reverse_proxy http://localhost:3000
+        }
+    ports:
+      - "80:80"
+      - "443:443"
+    deploy:
+      restart_policy:
+        condition: none
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 0.2g
+
   web:
     domainname: docwell
     image: ${AZ_REGISTRY_NAME}.azurecr.io/docwell_web:latest
@@ -7,7 +24,6 @@ services:
       context: ./web
     environment:
       REACT_APP_SERVER_URL: "http://localhost:8080"
-      PORT: 3000
     depends_on:
       - api
       - scripts
@@ -84,20 +100,6 @@ services:
           cpus: "0.5"
           memory: 512M
 
-  caddy:
-    image: caddy:latest
-    ports:
-      - "80:80"
-    volumes:
-      - caddy-prod:/etc/caddy
-    deploy:
-      restart_policy:
-        condition: none
-      resources:
-        limits:
-          cpus: "0.5"
-          memory: 0.2g
-
 volumes:
   api-data-prod:
     driver: azure_file
@@ -108,9 +110,4 @@ volumes:
     driver: azure_file
     driver_opts:
       share_name: mysqldata
-      storage_account_name: ${AZ_STORAGE_ACCOUNT_NAME}
-  caddy-prod:
-    driver: azure_file
-    driver_opts:
-      share_name: caddyprod
       storage_account_name: ${AZ_STORAGE_ACCOUNT_NAME}
