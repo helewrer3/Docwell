@@ -1,6 +1,7 @@
 version: "3"
 services:
   web:
+    domainname: docwell
     image: ${AZ_REGISTRY_NAME}.azurecr.io/docwell_web:latest
     build:
       context: ./web
@@ -21,6 +22,7 @@ services:
           memory: 1.5g
 
   api:
+    domainname: docwell
     image: ${AZ_REGISTRY_NAME}.azurecr.io/docwell_api:latest
     build:
       context: ./api
@@ -33,6 +35,8 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       DB_DATABASE: ${DB_DATABASE}
       DOCWELL_REPORTS_STORAGE_CONNECTION_STRING: ${DOCWELL_REPORTS_STORAGE_CONNECTION_STRING}
+    ports:
+      - "8080:8080"
     depends_on:
       - scripts
       - mysql
