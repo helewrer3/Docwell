@@ -4,7 +4,7 @@ import time
 import os
 import bcrypt
 
-max_attempts = 10
+max_attempts = 60
 attempts = 0
 
 myconn = None
@@ -19,8 +19,8 @@ while attempts < max_attempts:
     break
   except mysql.connector.Error as err:
     print(f"Error: {err}")
-    print("Retrying in 5 seconds...")
-    time.sleep(5)
+    print("Retrying in 60 seconds...")
+    time.sleep(60)
     attempts += 1
 
 if myconn is not None:
