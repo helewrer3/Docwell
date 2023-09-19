@@ -19,7 +19,7 @@ services:
       resources:
         limits:
           cpus: "1.5"
-          memory: 1600M
+          memory: 1500M
 
   api:
     image: ${AZ_REGISTRY_NAME}.azurecr.io/docwell_api:latest
