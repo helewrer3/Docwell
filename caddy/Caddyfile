@@ -1,3 +1,10 @@
+api.company.com {
+    tls garvitkansal@gmail.com
+    reverse_proxy http://localhost:3000 {
+        return 60 60s
+    }
+}
+
 docwell.centralindia.azurecontainer.io {
     tls garvitkansal@gmail.com
     reverse_proxy http://localhost:3000 {
