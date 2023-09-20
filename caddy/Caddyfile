@@ -1,4 +1,4 @@
-api.company.com {
+docwell.garvitkansal.com {
     tls garvitkansal@gmail.com
     reverse_proxy http://localhost:3000 
 }
