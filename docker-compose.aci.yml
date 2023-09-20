@@ -1,11 +1,10 @@
 version: "3"
 services:
   caddy:
-    image: caddy:latest
-    environment:
-      - CADDY_CONFIG=docwell.centralindia.azurecontainer.io {
-        reverse_proxy http://localhost:3000
-        }
+    domainname: docwell
+    image: ${AZ_REGISTRY_NAME}.azurecr.io/docwell_caddy:latest
+    build:
+      context: ./caddy
     ports:
       - "80:80"
       - "443:443"
