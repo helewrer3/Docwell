@@ -24,3 +24,4 @@ jobs:
           az acr build --image "${{ vars.AZ_REGISTRY_NAME }}.azurecr.io/docwell_api:latest" --registry "${{ vars.AZ_REGISTRY_NAME }}" "$GITHUB_WORKSPACE/api"
           az acr build --image "${{ vars.AZ_REGISTRY_NAME }}.azurecr.io/docwell_web:latest" --registry "${{ vars.AZ_REGISTRY_NAME }}" "$GITHUB_WORKSPACE/web"
           az acr build --image "${{ vars.AZ_REGISTRY_NAME }}.azurecr.io/docwell_scripts:latest" --registry "${{ vars.AZ_REGISTRY_NAME }}" "$GITHUB_WORKSPACE/scripts"
+          az acr build --image "${{ vars.AZ_REGISTRY_NAME }}.azurecr.io/docwell_caddy:latest" --registry "${{ vars.AZ_REGISTRY_NAME }}" "$GITHUB_WORKSPACE/caddy"
