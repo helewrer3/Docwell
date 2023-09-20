@@ -8,6 +8,7 @@ services:
     ports:
       - "80:80"
       - "443:443"
+      - "8080:8080"
     deploy:
       restart_policy:
         condition: none
@@ -41,7 +42,7 @@ services:
     build:
       context: ./api
     environment:
-      SERVER_PORT: 8080
+      SERVER_PORT: 8079
       NODE_ENV: production
       DB_HOST: mysql
       DB_PORT: 3307
