@@ -1,3 +1,6 @@
 docwell.centralindia.azurecontainer.io {
-    reverse_proxy http://localhost:3000
+    tls garvitkansal@gmail.com
+    reverse_proxy http://localhost:3000 {
+        return 60 60s
+    }
 }
