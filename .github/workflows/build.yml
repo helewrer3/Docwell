@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    environment: !PUT_ENV_HERE
+    environment: kusum_clinic
     runs-on: ubuntu-latest
     defaults:
       run:
