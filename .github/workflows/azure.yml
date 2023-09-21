@@ -5,7 +5,7 @@ on:
 
 jobs:
   azure:
-    environment: kusum_clinic
+    environment: !PUT_ENV_HERE
     runs-on: ubuntu-latest
     defaults:
       run:

@@ -4,7 +4,7 @@ services:
     build:
       context: ./web
     environment:
-      REACT_APP_SERVER_URL: "http://localhost:${SERVER_PORT}"
+      REACT_APP_SERVER_URL: "http://localhost:8080"
     ports:
       - "3000:3000"
     depends_on:
@@ -16,31 +16,31 @@ services:
     build:
       context: ./api
     environment:
-      SERVER_PORT: ${SERVER_PORT}
-      NODE_ENV: ${SERVER_ENV}
-      DB_HOST: ${DB_HOST}
-      DB_PORT: ${DB_PORT}
+      SERVER_PORT: 8080
+      NODE_ENV: development
+      DB_HOST: mysql
+      DB_PORT: 3307
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_DATABASE: ${DB_DATABASE}
       DOCWELL_REPORTS_STORAGE_CONNECTION_STRING: ${DOCWELL_REPORTS_STORAGE_CONNECTION_STRING}
     ports:
-      - "${SERVER_PORT}:${SERVER_PORT}"
+      - "8080:8080"
     links:
-      - ${DB_HOST}
+      - mysql
     depends_on:
       - scripts
       - mysql
     volumes:
-      - ${API_VOLUME}:/app
+      - data-dev:/app
 
   scripts:
     build:
       context: ./scripts
     environment:
-      DB_HOST: ${DB_HOST}
-      DB_PORT: ${DB_PORT}
-      DB_USER: ${DB_USER}
+      DB_HOST: mysql
+      DB_PORT: 3307
+      DB_USER: root
       DB_PASSWORD: ${DB_PASSWORD}
       DB_DATABASE: ${DB_DATABASE}
       DB_FIRST_USER: ${DB_FIRST_USER}
@@ -53,13 +53,12 @@ services:
   mysql:
     image: mysql:latest
     environment:
-      MYSQL_TCP_PORT: ${DB_PORT}
+      MYSQL_TCP_PORT: 3307
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "${DB_PORT}:${DB_PORT}"
+      - "3307:3307"
     volumes:
-      - ${DB_VOLUME}:/var/lib/mysql
+      - data-dev:/var/lib/mysql
 
 volumes:
-  api-data-dev:
-  mysql-data-dev:
+  data-dev:
