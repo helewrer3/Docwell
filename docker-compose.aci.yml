@@ -20,7 +20,7 @@ services:
           memory: 0.2g
 
   web:
-    domainname: docwell
+    domainname: ${AZ_DOMAIN_NAME}
     image: ${AZ_REGISTRY_NAME}.azurecr.io/docwell_web:latest
     build:
       context: ./web
