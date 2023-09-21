@@ -1,10 +1,14 @@
 name: Deploy
 
 on:
-  - workflow_dispatch
+  workflow_run:
+    workflows: ["Build"]
+    types:
+      - completed
 
 jobs:
-  main:
+  deploy:
+    environment: !PUT_ENV_HERE
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -18,17 +22,18 @@ jobs:
         run: |
           touch .env
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
-          echo "DOCWELL_REPORTS_STORAGE_CONNECTION_STRING=${{ secrets.DOCWELL_REPORTS_STORAGE_CONNECTION_STRING }}" >> .env
+          echo "AZ_STORAGE_ACCOUNT_CONNECTION_STRING=${{ secrets.AZ_STORAGE_ACCOUNT_CONNECTION_STRING }}" >> .env
           echo "DB_DATABASE=${{ vars.DB_DATABASE }}" >> .env
           echo "DB_FIRST_USER=${{ vars.DB_FIRST_USER }}" >> .env
           echo "DB_FIRST_PASSWORD=${{ secrets.DB_FIRST_PASSWORD }}" >> .env
           echo "AZ_STORAGE_ACCOUNT_NAME=${{ vars.AZ_STORAGE_ACCOUNT_NAME }}" >> .env
           echo "AZ_REGISTRY_NAME=${{ vars.AZ_REGISTRY_NAME }}" >> .env
+          echo "AZ_STORAGE_ACCOUNT_SHARE=${{ vars.AZ_STORAGE_ACCOUNT_SHARE }}" >> .env
 
       - name: Azure Login
         uses: azure/login@v1
         with:
-          creds: ${{ secrets.CI_AZURE_CREDENTIALS }}
+          creds: ${{ secrets.AZ_SECURITY_CREDS }}
 
       - name: Install Docker Compose CLI
         run: >
@@ -36,15 +41,15 @@ jobs:
 
       - name: Docker Login to Azure
         run: |
-          CLIENT_ID=$(echo '${{ secrets.CI_AZURE_CREDENTIALS }}' | jq --raw-output .clientId)
-          CLIENT_SECRET=$(echo '${{ secrets.CI_AZURE_CREDENTIALS }}' | jq --raw-output .clientSecret)
+          CLIENT_ID=$(echo '${{ secrets.AZ_SECURITY_CREDS }}' | jq --raw-output .clientId)
+          CLIENT_SECRET=$(echo '${{ secrets.AZ_SECURITY_CREDS }}' | jq --raw-output .clientSecret)
           TENANT_ID=$(az account show --query homeTenantId --output tsv)
           docker login azure --client-id "$CLIENT_ID" --client-secret "$CLIENT_SECRET" --tenant-id "$TENANT_ID"
           az acr login --name "${{ vars.AZ_REGISTRY_NAME }}" --username "$CLIENT_ID" --password "$CLIENT_SECRET"
 
       - name: Create ACI context
         run: |
-          docker context create aci acictx --resource-group "Docwell" --location "centralindia" --subscription-id "a554a48b-0200-4365-8ad0-e8fb6434dce6"
+          docker context create aci acictx --resource-group "${{ vars.AZ_RESOURCE_GROUP }}" --location "${{ vars.AZ_LOCATION }}" --subscription-id "${{ secrets.AZ_SUBSCRIPTION_ID }}"
           docker context use acictx
 
       - name: Deploy the app

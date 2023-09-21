@@ -1,7 +1,7 @@
 version: "3"
 services:
   caddy:
-    domainname: docwell
+    domainname: ${AZ_DOMAIN_NAME}
     image: ${AZ_REGISTRY_NAME}.azurecr.io/docwell_caddy:latest
     build:
       context: ./caddy
@@ -9,6 +9,8 @@ services:
       - "80:80"
       - "443:443"
       - "8080:8080"
+    environment:
+      - AZ_DOMAIN_NAME=${AZ_DOMAIN_NAME}
     deploy:
       restart_policy:
         condition: none
@@ -23,7 +25,7 @@ services:
     build:
       context: ./web
     environment:
-      REACT_APP_SERVER_URL: "https://docwell.garvitkansal.com:8080"
+      REACT_APP_SERVER_URL: "https://${AZ_DOMAIN_NAME}.garvitkansal.com:8080"
     depends_on:
       - api
       - scripts
@@ -37,7 +39,7 @@ services:
           memory: 1.5g
 
   api:
-    domainname: docwell
+    domainname: ${AZ_DOMAIN_NAME}
     image: ${AZ_REGISTRY_NAME}.azurecr.io/docwell_api:latest
     build:
       context: ./api
@@ -49,19 +51,19 @@ services:
       DB_USER: root
       DB_PASSWORD: ${DB_PASSWORD}
       DB_DATABASE: ${DB_DATABASE}
-      DOCWELL_REPORTS_STORAGE_CONNECTION_STRING: ${DOCWELL_REPORTS_STORAGE_CONNECTION_STRING}
+      DOCWELL_REPORTS_STORAGE_CONNECTION_STRING: ${AZ_STORAGE_ACCOUNT_CONNECTION_STRING}
     depends_on:
       - scripts
       - mysql
     volumes:
-      - api-data-prod:/app
+      - data-prod:/app
     deploy:
       restart_policy:
         condition: none
       resources:
         limits:
           cpus: "0.5"
-          memory: 512M
+          memory: 0.5g
 
   scripts:
     image: ${AZ_REGISTRY_NAME}.azurecr.io/docwell_scripts:latest
@@ -83,7 +85,7 @@ services:
       resources:
         limits:
           cpus: "0.5"
-          memory: 512M
+          memory: 0.5g
 
   mysql:
     image: mysql:latest
@@ -91,23 +93,18 @@ services:
       MYSQL_TCP_PORT: 3307
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
     volumes:
-      - mysql-data-prod:/var/lib/mysql
+      - data-prod:/var/lib/mysql
     deploy:
       restart_policy:
         condition: none
       resources:
         limits:
           cpus: "0.5"
-          memory: 512M
+          memory: 0.5g
 
 volumes:
-  api-data-prod:
+  data-prod:
     driver: azure_file
     driver_opts:
-      share_name: myapidata
-      storage_account_name: ${AZ_STORAGE_ACCOUNT_NAME}
-  mysql-data-prod:
-    driver: azure_file
-    driver_opts:
-      share_name: mysqldata
+      share_name: ${AZ_STORAGE_ACCOUNT_SHARE}
       storage_account_name: ${AZ_STORAGE_ACCOUNT_NAME}

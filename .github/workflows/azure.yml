@@ -1,0 +1,28 @@
+name: Azure
+
+on:
+  - workflow_dispatch
+
+jobs:
+  azure:
+    environment: !PUT_ENV_HERE
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZ_SECURITY_CREDS }}
+
+      - name: Create Resources
+        run: |
+          az group create --name ${{ vars.AZ_RESOURCE_GROUP }} --location ${{ vars.AZ_LOCATION }}
+          az acr create --resource-group ${{ vars.AZ_RESOURCE_GROUP }} --name ${{ vars.AZ_REGISTRY_NAME }} --sku Basic
+          az storage account create --name ${{ vars.AZ_STORAGE_ACCOUNT_NAME }} --resource-group ${{ vars.AZ_RESOURCE_GROUP }} --location ${{ vars.AZ_LOCATION }}
+          az storage share create  --name ${{ vars.AZ_STORAGE_ACCOUNT_SHARE }} --account-name ${{ vars.AZ_STORAGE_ACCOUNT_NAME }}
