@@ -17,7 +17,6 @@ const initFilters = (tableName) => {
 };
 
 const mergeFilters = (prevFilters, val) => {
-  console.log(val);
   const res = { ...prevFilters };
   for (const key in val) {
     if (key in res && val[key] != undefined) {

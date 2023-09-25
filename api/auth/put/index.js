@@ -1,5 +1,3 @@
-const bcrypt = require("bcrypt");
-
 const { updateIntoDB } = require("../../utils/database/updateIntoDB");
 
 const verifyUser = async (req, res) => {

@@ -8,11 +8,10 @@ import {
   Spin,
   Statistic,
   Avatar,
-  notification,
   Typography,
 } from "antd";
-import axios from "axios";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
 
 import Sidebar from "../utils/components/Sidebar";
 import { strings } from "../utils/helper/strings";
@@ -20,9 +19,9 @@ import {
   deleteFromStorage,
   getFromStorage,
 } from "../utils/helper/localStorage";
-import { useNavigate } from "react-router-dom";
 import { path } from "../utils/routers/routes";
 import FilterTable from "../utils/components/FilterTable";
+import { delRequest, getRequest, putRequest } from "../utils/helper/http";
 
 const { Content } = Layout;
 const { Title } = Typography;
@@ -35,30 +34,17 @@ const getStats = async ({ setVisitsWeek, setIsLoading }) => {
     for (let i = 0; i < 7; i++) {
       const curDate = new Date(currentDate);
       curDate.setDate(currentDate.getDate() - i);
-      const visit = await axios.get(
-        `${process.env.REACT_APP_SERVER_URL}/data/meta/${strings.tables.visits}`,
-        {
-          params: {
-            filters: {
-              [strings.rows.dateOfVisit]: moment(curDate).format("YYYY-MM-DD"),
-            },
+      const payload = await getRequest({
+        url: `data/meta/${strings.tables.visits}`,
+        params: {
+          filters: {
+            [strings.rows.dateOfVisit]: moment(curDate).format("YYYY-MM-DD"),
           },
-        }
-      );
-      visCount += visit.data.rowCount;
+        },
+      });
+      visCount += payload.rowCount;
     }
-    notification.open({
-      type: "success",
-      message: "Dashboard Initialized",
-      description: "Dashboard initialized successfully.",
-    });
   } catch (error) {
-    notification.open({
-      type: "error",
-      message: "Error",
-      description:
-        "There was error getting the required data, try again later.",
-    });
     console.log(error);
   }
   setVisitsWeek(visCount);
@@ -67,38 +53,27 @@ const getStats = async ({ setVisitsWeek, setIsLoading }) => {
 
 const verifyUserSignup = async ({ record }) => {
   try {
-    await axios.put(`${process.env.REACT_APP_SERVER_URL}/auth`, {
-      name: record.name,
-    });
-    notification.open({
-      message: "User Verified!",
-      description: "Please refresh to reflect the changes.",
-      type: "success",
-    });
+    const _ = await putRequest({ url: `auth`, body: { name: record.name } });
   } catch (error) {
     console.log(error);
-    notification.open({
-      message: "Error verifying user",
-      description: "Please try again later.",
-      type: "error",
-    });
+  }
+};
+
+const delUserSignup = async ({ record }) => {
+  try {
+    const _ = await delRequest({ url: `auth`, body: { name: record.name } });
+  } catch (error) {
+    console.log(error);
   }
 };
 
 const checkIfAdmin = async ({ setIsAdmin }) => {
   try {
     const user = getFromStorage({ name: "name" });
-    const response = await axios.get(
-      `${process.env.REACT_APP_SERVER_URL}/auth/${user}`
-    );
-    setIsAdmin(response.data.isAdmin == 0 ? false : true);
+    const payload = getRequest({ url: `auth/${user}` });
+    setIsAdmin(payload.isAdmin == 0 ? false : true);
   } catch (error) {
     console.log(error);
-    notification.open({
-      message: "Error checking adminship",
-      description: "Please try again later.",
-      type: "error",
-    });
   }
 };
 
@@ -178,7 +153,7 @@ const Dashboard = ({ sidebarKey }) => {
                 key={"user_accounts"}
                 filters={{ is_user: 0 }}
                 tableName={"user_accounts"}
-                callback={verifyUserSignup}
+                callback={[verifyUserSignup, delUserSignup]}
               />
             </Col>
           </Row>

@@ -15,7 +15,12 @@ const addUser = async (req, res) => {
       },
     });
 
-    res.status(201).json({ message: "ok" });
+    res
+      .status(201)
+      .json({
+        message:
+          "Added user, please wait for admin to approve your signup request.",
+      });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Error logging you in.", payload: error });
