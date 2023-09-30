@@ -1,25 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { Select } from "antd";
-import axios from "axios";
 
 import { strings } from "../helper/strings";
+import { getRequest } from "../helper/http";
 
-const IdSelect = ({ tableName, disabled = false, callback = null }) => {
-  const getIdOptions = async ({ name = "" }) => {
-    const response = await axios.get(
-      `${process.env.REACT_APP_SERVER_URL}/data`,
-      {
-        params: {
-          tableName:
-            tableName == strings.tables.visits
-              ? strings.tables.patients
-              : strings.tables.manufacturers,
-          filters: { name },
-          replaceWithName: false,
-        },
-      }
-    );
-    return (response.data || []).map((ele) => {
+const getIdOptions = async ({ name = "", tableName }) => {
+  try {
+    const payload = await getRequest({
+      url: `data`,
+      params: {
+        tableName:
+          tableName == strings.tables.visits
+            ? strings.tables.patients
+            : strings.tables.manufacturers,
+        filters: { name },
+        replaceWithName: false,
+      },
+    });
+
+    return (payload || []).map((ele) => {
       return {
         label: ele.name,
         value:
@@ -28,14 +27,18 @@ const IdSelect = ({ tableName, disabled = false, callback = null }) => {
             : ele[strings.rows.manufacturerID],
       };
     });
-  };
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
 
+const IdSelect = ({ tableName, disabled = false, callback = null }) => {
   const [idOptions, setIdOptions] = useState([]);
-
   useEffect(() => {
     const fetchData = async () => {
       if (idOptions.length === 0) {
-        const newOptions = await getIdOptions({ name: "" });
+        const newOptions = await getIdOptions({ name: "", tableName });
         setIdOptions(newOptions);
       }
     };
@@ -50,6 +53,7 @@ const IdSelect = ({ tableName, disabled = false, callback = null }) => {
       onSearch={async (input) => {
         const newOptions = await getIdOptions({
           name: input,
+          tableName,
         });
         setIdOptions(newOptions);
       }}

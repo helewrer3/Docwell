@@ -18,14 +18,18 @@ const getUser = async (req, res) => {
         (await bcrypt.compare(password + rows[0].salt, rows[0].password)) &&
         rows[0].is_user == 1;
       if (isVerified)
-        res.status(200).json({ name, token: await argon2.hash(name) });
+        res.status(200).json({
+          message: "User successfully signed in.",
+          payload: { name, token: await argon2.hash(name) },
+        });
       else
         throw "Please check your password or wait for the admin to approve your account.";
     } else throw "Username not found";
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error getting user entry.", payload: error });
+    res.status(500).json({
+      message: "Error getting user entry, please check your credentials.",
+      payload: error,
+    });
   }
 };
 
@@ -39,12 +43,15 @@ const isUserAdmin = async (req, res) => {
       },
       replaceWithName: false,
     });
-    res.status(200).json({ isAdmin: rows[0].is_admin });
+    res.status(200).json({
+      message: "Getting user data.",
+      payload: { isAdmin: rows[0].is_admin },
+    });
   } catch (error) {
     console.log(error);
     res
       .status(500)
-      .json({ message: "Error getting user entry.", payload: error });
+      .json({ message: "Error getting user data.", payload: error });
   }
 };
 

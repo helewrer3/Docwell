@@ -20,7 +20,7 @@ services:
       NODE_ENV: development
       DB_HOST: mysql
       DB_PORT: 3307
-      DB_USER: ${DB_USER}
+      DB_USER: root
       DB_PASSWORD: ${DB_PASSWORD}
       DB_DATABASE: ${DB_DATABASE}
       DOCWELL_REPORTS_STORAGE_CONNECTION_STRING: ${DOCWELL_REPORTS_STORAGE_CONNECTION_STRING}
@@ -45,10 +45,8 @@ services:
       DB_DATABASE: ${DB_DATABASE}
       DB_FIRST_USER: ${DB_FIRST_USER}
       DB_FIRST_PASSWORD: ${DB_FIRST_PASSWORD}
-    links:
-      - ${DB_HOST}
     depends_on:
-      - ${DB_HOST}
+      - mysql
 
   mysql:
     image: mysql:latest

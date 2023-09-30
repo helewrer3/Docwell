@@ -1,7 +1,5 @@
-const createCsvWriter = require("csv-writer").createObjectCsvWriter;
 const archiver = require("archiver");
 const fs = require("fs");
-const path = require("path");
 
 const { addIntoDB } = require("../../utils/database/addIntoDB");
 const { getFromDB } = require("../../utils/database/getFromDB");
@@ -10,10 +8,10 @@ const postDataRecords = async (req, res) => {
   const { tableName, dataToInsert } = req.body;
   try {
     const result = await addIntoDB({ tableName, dataToInsert });
-    res.status(201).json(result);
+    res.status(201).json({ message: "ok", payload: result });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error });
+    res.status(500).json({ message: "Error saving data.", payload: error });
   }
 };
 
@@ -31,26 +29,18 @@ const extractDataRecords = async (req, res) => {
         tableName: table,
         replaceWithName: false,
       });
+      if (rows.length) {
+        let writeStream = Object.keys(rows[0]).join("\t") + "\n";
 
-      let headers = [];
+        rows.forEach((row) => {
+          writeStream += Object.values(row).join("\t") + "\n";
+        });
 
-      for (const key in rows[0]) {
-        if (Object.hasOwnProperty.call(rows[0], key)) {
-          headers.push({
-            id: key,
-            label: key,
-          });
-        }
+        await fs.promises.writeFile(`${table}.csv`, writeStream);
+        archive.append(fs.createReadStream(`${table}.csv`), {
+          name: `${table}.csv`,
+        });
       }
-
-      const csvWriter = createCsvWriter({
-        path: `${table}.csv`,
-        header: headers,
-      });
-      await csvWriter.writeRecords(rows);
-      archive.append(fs.createReadStream(`${table}.csv`), {
-        name: `${table}.csv`,
-      });
     }
     archive.finalize();
 
@@ -60,6 +50,7 @@ const extractDataRecords = async (req, res) => {
       archive.pipe(res);
     });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Error extracting data.", payload: error });
   }
 };

@@ -37,6 +37,15 @@ const getMergedPdf = async ({ files }) => {
   }
 };
 
+const streamToBuffer = (stream) => {
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+    stream.on("data", (chunk) => chunks.push(chunk));
+    stream.on("end", () => resolve(Buffer.concat(chunks)));
+    stream.on("error", (error) => reject(error));
+  });
+};
+
 const uploadToAzureStorage = async ({ pdf, visit_id }) => {
   const blobServiceClient = BlobServiceClient.fromConnectionString(
       `${process.env.DOCWELL_REPORTS_STORAGE_CONNECTION_STRING}`
@@ -48,19 +57,40 @@ const uploadToAzureStorage = async ({ pdf, visit_id }) => {
   try {
     await containerClient.create();
     await containerClient.setAccessPolicy("container");
-  } catch (error) {
-    console.log(`Container already exists`);
-  }
+  } catch (error) {}
 
   const blockBlobClient = containerClient.getBlockBlobClient(`${visit_id}.pdf`),
     blobExists = await blockBlobClient.exists();
 
   try {
-    if (blobExists) await blockBlobClient.delete();
-    await blockBlobClient.upload(pdf, pdf.length);
+    if (blobExists) {
+      const existingBlobResponse = await blockBlobClient.download(),
+        existingPdfBuffer = await streamToBuffer(
+          existingBlobResponse.readableStreamBody
+        );
+
+      const existingPdfDoc = await PDFDocument.load(existingPdfBuffer),
+        newPdfDoc = await PDFDocument.load(pdf);
+
+      const copiedPages = await existingPdfDoc.copyPages(
+        newPdfDoc,
+        newPdfDoc.getPageIndices()
+      );
+
+      copiedPages.forEach((copiedPage) => {
+        existingPdfDoc.addPage(copiedPage);
+      });
+
+      const updatedPdfBuffer = await existingPdfDoc.save();
+
+      await blockBlobClient.upload(updatedPdfBuffer, updatedPdfBuffer.length);
+    } else {
+      await blockBlobClient.upload(pdf, pdf.length);
+    }
     return blockBlobClient.url;
   } catch (error) {
-    throw `Error uploading or deleting blob`;
+    console.log(error);
+    throw error;
   }
 };
 
@@ -75,8 +105,6 @@ const uploadToStorage = async (req, res) => {
       filters: { visit_id },
       dataToUpdate: { reports_url: reportsUrl },
     });
-
-    console.log(reportsUrl);
 
     res
       .status(200)
