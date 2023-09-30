@@ -2,7 +2,7 @@ const { deleteFromDB } = require("../../utils/database/deleteFromDB");
 
 const delUser = async (req, res) => {
   try {
-    const { name } = req.body;
+    const { name } = req.params;
 
     await deleteFromDB({
       tableName: "user_accounts",

@@ -43,14 +43,15 @@ const isUserAdmin = async (req, res) => {
       },
       replaceWithName: false,
     });
-    res
-      .status(200)
-      .json({ message: "ok", payload: { isAdmin: rows[0].is_admin } });
+    res.status(200).json({
+      message: "Getting user data.",
+      payload: { isAdmin: rows[0].is_admin },
+    });
   } catch (error) {
     console.log(error);
     res
       .status(500)
-      .json({ message: "Error getting user entry.", payload: error });
+      .json({ message: "Error getting user data.", payload: error });
   }
 };
 

@@ -1,7 +1,17 @@
 import { notification } from "antd";
 import axios from "axios";
 
+notification.config({
+  placement: "topRight",
+  duration: 3,
+  maxCount: 5,
+});
+
 const getRequest = async ({ url, params = {} }) => {
+  notification.open({
+    description: "Processing your request, please wait for the response.",
+    type: "info",
+  });
   try {
     const { message, payload = {} } = (
       await axios.get(`${process.env.REACT_APP_SERVER_URL}/${url}`, {
@@ -24,6 +34,10 @@ const getRequest = async ({ url, params = {} }) => {
 };
 
 const postRequest = async ({ url, body = {}, config = {} }) => {
+  notification.open({
+    description: "Processing your request, please wait for the response.",
+    type: "info",
+  });
   try {
     const response = await axios.post(
       `${process.env.REACT_APP_SERVER_URL}/${url}`,
@@ -56,6 +70,10 @@ const postRequest = async ({ url, body = {}, config = {} }) => {
 };
 
 const putRequest = async ({ url, body = {} }) => {
+  notification.open({
+    description: "Processing your request, please wait for the response.",
+    type: "info",
+  });
   try {
     const { message, payload = {} } = (
       await axios.put(`${process.env.REACT_APP_SERVER_URL}/${url}`, body)
@@ -75,10 +93,16 @@ const putRequest = async ({ url, body = {} }) => {
   }
 };
 
-const delRequest = async ({ url, body = {} }) => {
+const delRequest = async ({ url, params = {} }) => {
+  notification.open({
+    description: "Processing your request, please wait for the response.",
+    type: "info",
+  });
   try {
     const { message, payload = {} } = (
-      await axios.delete(`${process.env.REACT_APP_SERVER_URL}/${url}`, body)
+      await axios.delete(`${process.env.REACT_APP_SERVER_URL}/${url}`, {
+        params,
+      })
     ).data;
     notification.open({
       description: message,

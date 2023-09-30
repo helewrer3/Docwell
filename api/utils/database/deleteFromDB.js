@@ -5,7 +5,7 @@ const deleteFromDB = async ({ tableName, filters = {} }) => {
 
   for (const filter in filters)
     if (filters[filter] !== "")
-      conditions.push(`${tableName}.${filter} = '${filters[filter]}'`);
+      conditions.push(`${filter} = '${filters[filter]}'`);
 
   const whereClause =
     conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";

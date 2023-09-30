@@ -2,7 +2,7 @@ const { updateIntoDB } = require("../../utils/database/updateIntoDB");
 
 const verifyUser = async (req, res) => {
   try {
-    const { name } = req.body;
+    const { name } = req.params;
 
     await updateIntoDB({
       tableName: "user_accounts",

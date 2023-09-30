@@ -17,18 +17,19 @@ const columns = ({ tableName, callback = null }) => {
           key: column.COLUMN_NAME,
         }
   );
-  if (callback != null)
-    tableColumns.push({
-      render: (_, record) => (
-        <>
-          {callback.forEach((fn, i) => (
-            <Button type="primary" onClick={() => fn({ record })}>
-              {i ? <p>Approve</p> : <p>Decline</p>}
-            </Button>
-          ))}
-        </>
-      ),
+  if (callback != null) {
+    callback.forEach((fn, i) => {
+      tableColumns.push({
+        title: i ? "Decline User" : "Approve User",
+        render: (_, record) => (
+          <Button type="primary" onClick={() => fn({ record })}>
+            {i ? "Decline" : "Approve"}
+          </Button>
+        ),
+      });
     });
+  }
+
   return tableColumns;
 };
 

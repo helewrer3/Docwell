@@ -53,7 +53,7 @@ const getStats = async ({ setVisitsWeek, setIsLoading }) => {
 
 const verifyUserSignup = async ({ record }) => {
   try {
-    const _ = await putRequest({ url: `auth`, body: { name: record.name } });
+    const _ = await putRequest({ url: `auth/${record.name}` });
   } catch (error) {
     console.log(error);
   }
@@ -61,7 +61,7 @@ const verifyUserSignup = async ({ record }) => {
 
 const delUserSignup = async ({ record }) => {
   try {
-    const _ = await delRequest({ url: `auth`, body: { name: record.name } });
+    const _ = await delRequest({ url: `auth/${record.name}` });
   } catch (error) {
     console.log(error);
   }
@@ -70,7 +70,7 @@ const delUserSignup = async ({ record }) => {
 const checkIfAdmin = async ({ setIsAdmin }) => {
   try {
     const user = getFromStorage({ name: "name" });
-    const payload = getRequest({ url: `auth/${user}` });
+    const payload = await getRequest({ url: `auth/${user}` });
     setIsAdmin(payload.isAdmin == 0 ? false : true);
   } catch (error) {
     console.log(error);
