@@ -5,7 +5,7 @@ on:
 
 jobs:
   deploy:
-    environment: test
+    environment: ${{ vars.DEFAULT_ENV }}
     runs-on: ubuntu-latest
     defaults:
       run:
