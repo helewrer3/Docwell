@@ -5,7 +5,7 @@ on:
 
 jobs:
   azure:
-    environment: ${{ vars.DEFAULT_ENV }}
+    environment: test
     runs-on: ubuntu-latest
     defaults:
       run:

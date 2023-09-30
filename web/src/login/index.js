@@ -1,21 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Button,
-  Card,
-  Form,
-  Input,
-  Row,
-  Col,
-  Typography,
-  Divider,
-  notification,
-} from "antd";
-import axios from "axios";
+import { Button, Card, Form, Input, Row, Col, Typography, Divider } from "antd";
 
 import { strings, prettify } from "../utils/helper/strings";
 import { saveToStorage } from "../utils/helper/localStorage";
 import { path } from "../utils/routers/routes";
+import { getRequest, postRequest } from "../utils/helper/http";
 
 const { Title } = Typography;
 const { Item } = Form;
@@ -23,40 +13,21 @@ const { rows } = strings;
 
 const onFinish = async ({ values, navigate, isLogin }) => {
   try {
-    let msg = "";
     if (isLogin) {
-      const res = await axios.get(`${process.env.REACT_APP_SERVER_URL}/auth/`, {
-        params: {
-          ...values,
-        },
-      });
-      saveToStorage({ name: "token", data: res.data.token });
-      saveToStorage({ name: "name", data: res.data.name });
-
-      const resMeta = await axios.get(
-        `${process.env.REACT_APP_SERVER_URL}/data/meta`
-      );
-      saveToStorage({ name: "database", data: resMeta.data });
-      msg = "User successfully logged in.";
+      const authPayload = await getRequest({
+          url: `auth`,
+          params: { ...values },
+        }),
+        dbPayload = await getRequest({ url: `data/meta` });
+      saveToStorage({ name: "name", data: authPayload.name });
+      saveToStorage({ name: "token", data: authPayload.token });
+      saveToStorage({ name: "database", data: dbPayload });
     } else {
-      await axios.post(`${process.env.REACT_APP_SERVER_URL}/auth/`, {
-        ...values,
-      });
-      msg = "Please wait for the admins to approve your request.";
+      const _ = await postRequest({ url: `auth`, body: { ...values } });
     }
     navigate(path.entry);
-    notification.open({
-      type: "success",
-      message: "Welcome!",
-      description: msg,
-    });
   } catch (error) {
     console.log(error);
-    notification.open({
-      type: "error",
-      message: "Error",
-      description: "There was an error logging you in, try again later.",
-    });
   }
 };
 

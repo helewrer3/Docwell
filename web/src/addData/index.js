@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Button, notification } from "antd";
-import axios from "axios";
+import { Button } from "antd";
 
 import ModalForm from "../utils/components/ModalForm";
+import { postRequest } from "../utils/helper/http";
 
 const AddData = ({ tableName = "" }) => {
   const [open, setOpen] = useState(false);
@@ -13,31 +13,20 @@ const AddData = ({ tableName = "" }) => {
   const callback = async (data) => {
     setNewData(data);
     try {
-      await axios.post(
-        `${process.env.REACT_APP_SERVER_URL}/data`,
-        {
+      const _ = await postRequest({
+        url: `data`,
+        body: {
           tableName: tableName,
           dataToInsert: data,
         },
-        {
+        config: {
           headers: {
             "Content-Type": "application/json",
           },
-        }
-      );
-      notification.open({
-        type: "success",
-        message: "Success",
-        description:
-          "Data added successfully, please refresh the page to reflect the changes.",
+        },
       });
     } catch (error) {
       console.log(error);
-      notification.open({
-        type: "error",
-        message: "Error",
-        description: "Couldn't add data into database, check your values.",
-      });
     }
     setOpen(false);
   };
