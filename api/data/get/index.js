@@ -22,7 +22,7 @@ const getDataRecords = async (req, res) => {
       size: parseInt(size),
       replaceWithName,
     });
-    res.status(200).json(result);
+    res.status(200).json({ message: "Loaded table data.", payload: result });
   } catch (error) {
     console.log(error);
     res
@@ -40,7 +40,9 @@ const getDataMeta = async (req, res) => {
         tableName: tables[i].TABLE_NAME,
       });
     }
-    res.status(200).json(meta);
+    res
+      .status(200)
+      .json({ message: "Loaded database meta data.", payload: meta });
   } catch (error) {
     res
       .status(500)
@@ -54,7 +56,7 @@ const getTableMeta = async (req, res) => {
       filters = req.query.filters;
     const count = await getTableRowsCount({ tableName, filters });
     const meta = { rowCount: count[0].COUNT_ROWS };
-    res.status(200).json(meta);
+    res.status(200).json({ message: "Loaded table meta data.", payload: meta });
   } catch (error) {
     console.log(error);
     res

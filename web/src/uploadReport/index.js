@@ -1,19 +1,10 @@
 import React from "react";
-import {
-  Button,
-  Col,
-  Layout,
-  Row,
-  Upload,
-  Form,
-  InputNumber,
-  notification,
-} from "antd";
+import { Button, Col, Layout, Row, Upload, Form, InputNumber } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
-import axios from "axios";
 
 import Sidebar from "../utils/components/Sidebar";
 import { prettify, strings } from "../utils/helper/strings";
+import { postRequest } from "../utils/helper/http";
 
 const { Content } = Layout;
 const { Dragger } = Upload;
@@ -34,22 +25,12 @@ const onFinish = async (values) => {
   for (let index = 0; index < upload.length; index++)
     formData.append("image", upload[index]);
   try {
-    await axios.post(
-      `${process.env.REACT_APP_SERVER_URL}/azure/storage/${visit_id}`,
-      formData
-    );
-    notification.open({
-      type: "success",
-      message: "Reports Uploaded!",
-      description:
-        "You can access the contents with the download link provided.",
+    const _ = await postRequest({
+      url: `azure/storage/${visit_id}`,
+      body: formData,
     });
   } catch (error) {
-    notification.open({
-      type: "error",
-      message: "Error uploading Reports!",
-      description: "There was some error in the process, try again later.",
-    });
+    console.log(error);
   }
 };
 
